@@ -23,7 +23,7 @@ void Cliente :: set_endereco(string endereco){
 void Cliente :: set_cartao(string cartao){
     this->cartao = cartao;
 }
-bool Funcionario :: login(string email, string senha){
+bool Pessoa :: login(string email, string senha){
     if(get_email() == email && get_senha() == senha){
         return true;
     }
