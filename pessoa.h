@@ -26,6 +26,8 @@ class Pessoa{
         string get_cpf(){return cpf;}
         string get_email(){return email;}
         string get_senha(){return senha;}
+        
+        bool login(string email, string senha);
 };
 
 class Funcionario : public Pessoa{
@@ -38,7 +40,7 @@ class Funcionario : public Pessoa{
         void set_cargo(string cargo);
         string get_cargo(){return cargo;}
 
-        bool login(string email, string senha);
+        
 };
 
 class Cliente : public Pessoa{
