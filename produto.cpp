@@ -50,13 +50,51 @@ void add_produto(string nome, string tamanho, string categoria, string cor, stri
         fim = novo;
     }
     tam_estoque++;
+    system("cls");
+    cout << "Produto Cadastrado" << endl;
 }
 
 void ver(){
     Produto * aux = inicio;
-    while(aux != NULL){
+    for(int i=0; i < tam_estoque; i++){
         cout <<"Nome: "<<aux->get_nome_produto()<<" - ";
         cout <<"Preco: "<<aux->get_preco()<<endl;
         aux = aux->prox;
+    }
+}
+
+void menu(){
+    int opc = 1;
+    string nome,tamanho,categoria,cor,material;
+    double preco;
+    int quantidade,codigo;
+
+    while(opc != 0){
+        cout << "[ 1 ] Cadastrar Produtos\n";
+        cout << "[ 2 ] Ver Estoque\n";
+        cout << "[ 3 ] Sair\n";
+        cout << ">> ";
+        cin >> opc;
+
+        switch(opc){
+            case 1:
+                cout << "Nome: "; cin >> nome;
+                cout << "Tamanho: "; cin >> tamanho;
+                cout << "Categoria: "; cin >> categoria;
+                cout << "Cor: "; cin >> cor;
+                cout << "Material: "; cin >> material;
+                cout << "Preco R$: "; cin >> preco;
+                cout << "Quantidade: "; cin >> quantidade;
+                cout << "Codigo: "; cin >> codigo;
+                add_produto(nome,tamanho,categoria,cor,material,preco,quantidade,codigo);
+                break;
+            case 2:
+                system("cls");
+                ver();
+                break;
+            default:
+                cout << "erro\n";
+                break;
+        }
     }
 }

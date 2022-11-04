@@ -39,11 +39,12 @@ class Produto{
         double get_preco();
         int get_quantidade();
         int get_codigo();
+        
 
         Produto * prox;
 };
 
-
+void menu();
 void add_produto(string nome, string tamanho, string categoria, string cor, string material, double preco, int quantidade, int codigo);
 void ver();
 #endif

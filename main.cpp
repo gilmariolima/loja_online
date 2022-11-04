@@ -6,11 +6,11 @@
 using namespace std;
 
 int main(){
-    Funcionario f("gilmario", "08123", "gil@gmail", "gilmario12", "gerente");
+    Funcionario f("gilmario", "08123", "gil@gmail", "g12", "gerente");
     int opc = 1;
     string email, senha;
     while(opc != 0){
-        cout << "login\n" << endl;
+        cout << "login" << endl;
         cout << "email: ";
         cin >> email;
         cout << "senha: ";
@@ -19,9 +19,11 @@ int main(){
         system("cls");
         if(f.login(email, senha) == true){
             cout << "Bem vindo "<< f.get_nome()<<endl;
+            opc = 0;
         }else{
-            cout << "lamento"<<endl;
+            cout << "Email ou senha invalido\n"<<endl;
         }
     }
+    menu();
     return 0;
 }
