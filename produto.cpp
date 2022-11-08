@@ -1,5 +1,6 @@
 #include <iostream>
 #include "produto.h"
+#include <fstream>
 
 void Produto :: set_nome_produto(string nome){
     this->nome = nome;
@@ -63,6 +64,27 @@ void ver(){
     }
 }
 
+void salvar(){
+    Produto * aux = inicio;
+    ofstream arq;
+    arq.open("dados.txt");
+    for(int i=0; i<tam_estoque; i++){
+        arq.write((char *)&aux, sizeof(Produto));
+        aux = aux->prox;
+    }    
+    arq.close();
+}
+
+void ler(){
+    Produto * aux;
+    ifstream arq;
+    arq.open("dados.txt");
+    arq.read((char*)&aux, sizeof(Produto));
+    add_produto(aux->get_nome_produto(),aux->get_tamanho(), aux->get_categoria(), aux->get_cor(),aux->get_material(), aux->get_preco(), aux->get_quantidade(), aux->get_codigo());
+    arq.close();
+
+}
+
 void menu(){
     int opc = 1;
     string nome,tamanho,categoria,cor,material;
@@ -72,7 +94,9 @@ void menu(){
     while(opc != 0){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
-        cout << "[ 3 ] Sair\n";
+        cout << "[ 3 ] Salvar\n";
+        cout << "[ 4 ] Ler\n";
+        cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
 
@@ -91,6 +115,12 @@ void menu(){
             case 2:
                 system("cls");
                 ver();
+                break;
+            case 3:
+                salvar();
+                break;
+            case 4:
+                ler();
                 break;
             default:
                 cout << "erro\n";

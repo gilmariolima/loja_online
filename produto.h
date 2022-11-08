@@ -47,4 +47,9 @@ class Produto{
 void menu();
 void add_produto(string nome, string tamanho, string categoria, string cor, string material, double preco, int quantidade, int codigo);
 void ver();
+void apagar();
+
+
+void salvar();
+void ler();
 #endif

@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(){
-    Funcionario f("gilmario", "08123", "gil@gmail", "g12", "gerente");
+    Funcionario f("gilmario", "08123", "g", "12", "gerente");
     int opc = 1;
     string email, senha;
     while(opc != 0){
