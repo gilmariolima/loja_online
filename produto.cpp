@@ -67,7 +67,7 @@ void ver(){
 void salvar(){
     Produto * aux = inicio;
     ofstream arq;
-    arq.open("dados.txt");
+    arq.open("dados.dat",ios_base::out|ios_base::binary);
     for(int i=0; i<tam_estoque; i++){
         arq.write((char *)&aux, sizeof(Produto));
         aux = aux->prox;
@@ -76,13 +76,12 @@ void salvar(){
 }
 
 void ler(){
-    Produto * aux;
+    Produto aux("","","","","",0,0,0);
     ifstream arq;
-    arq.open("dados.txt");
+    arq.open("dados.dat", ios_base::in|ios_base::binary);
     arq.read((char*)&aux, sizeof(Produto));
-    add_produto(aux->get_nome_produto(),aux->get_tamanho(), aux->get_categoria(), aux->get_cor(),aux->get_material(), aux->get_preco(), aux->get_quantidade(), aux->get_codigo());
+    add_produto(aux.get_nome_produto(),aux.get_tamanho(), aux.get_categoria(), aux.get_cor(),aux.get_material(), aux.get_preco(), aux.get_quantidade(), aux.get_codigo());
     arq.close();
-
 }
 
 void menu(){
