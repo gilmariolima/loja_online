@@ -1,6 +1,8 @@
 #include <iostream>
+#include <vector>
 #include "produto.h"
 #include <fstream>
+vector<Produto> estoque;
 
 void Produto :: set_nome_produto(string nome){
     this->nome = nome;
@@ -35,52 +37,35 @@ double Produto :: get_preco(){return preco;}
 int Produto :: get_quantidade(){return quantidade;}
 int Produto :: get_codigo(){return codigo;}
 
+void salvar(Produto aux){
+    ofstream arq;
+    arq.open("estoque.dat", ios::binary | ios::app);
+    arq.write((char *)&aux, sizeof(Produto)); 
+    arq.close();
+}
 
-Produto * inicio = NULL;
-Produto * fim = NULL;
-int tam_estoque = 0;
-
-void add_produto(string nome, string tamanho, string categoria, string cor, string material, double preco, int quantidade, int codigo){
-    Produto * novo = new Produto(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
-
-    if(inicio == NULL){
-        inicio = novo;
-        fim = novo;
-    }else{
-        fim->prox = novo;
-        fim = novo;
-    }
-    tam_estoque++;
+void add_produto(string nome, string tamanho, string categoria, string cor, string material, float preco, int quantidade, int codigo){
+    Produto novo(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
+    salvar(novo);
     system("cls");
     cout << "Produto Cadastrado" << endl;
 }
 
 void ver(){
-    Produto * aux = inicio;
-    for(int i=0; i < tam_estoque; i++){
-        cout <<"Nome: "<<aux->get_nome_produto()<<" - ";
-        cout <<"Preco: "<<aux->get_preco()<<endl;
-        aux = aux->prox;
+    for(int i=0; i<estoque.size();i++){
+        cout << estoque[i].get_nome_produto() << "-" << estoque[i].get_preco() << "-" <<estoque[i].get_quantidade()<< endl;
     }
-}
-
-void salvar(){
-    Produto * aux = inicio;
-    ofstream arq;
-    arq.open("dados.dat",ios_base::out|ios_base::binary);
-    for(int i=0; i<tam_estoque; i++){
-        arq.write((char *)&aux, sizeof(Produto));
-        aux = aux->prox;
-    }    
-    arq.close();
+    cout << endl;
 }
 
 void ler(){
-    Produto aux("porra","","","","",0,0,0);
+    estoque.clear();
+    Produto novo;
     ifstream arq;
-    arq.open("dados.dat", ios_base::in|ios_base::binary);
-    arq.read((char*)&aux, sizeof(Produto));
-    add_produto(aux.get_nome_produto(),aux.get_tamanho(), aux.get_categoria(), aux.get_cor(),aux.get_material(), aux.get_preco(), aux.get_quantidade(), aux.get_codigo());
+    arq.open("estoque.dat", ios::binary);
+    while(arq.read((char*)&novo, sizeof(Produto))){
+        estoque.push_back(novo);
+    }
     arq.close();
 }
 
@@ -93,8 +78,6 @@ void menu(){
     while(opc != 0){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
-        cout << "[ 3 ] Salvar\n";
-        cout << "[ 4 ] Ler\n";
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
@@ -113,16 +96,10 @@ void menu(){
                 break;
             case 2:
                 system("cls");
+                ler();
                 ver();
                 break;
-            case 3:
-                salvar();
-                break;
-            case 4:
-                ler();
-                break;
             default:
-                cout << "erro\n";
                 break;
         }
     }
