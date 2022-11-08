@@ -21,7 +21,7 @@ class Produto{
             set_quantidade(quantidade);
             set_codigo(codigo);
         }
-
+      
         void set_nome_produto(string nome);
         void set_tamanho(string tamanho);
         void set_categoria(string categoria);
@@ -45,11 +45,11 @@ class Produto{
 };
 
 void menu();
-void add_produto(string nome, string tamanho, string categoria, string cor, string material, double preco, int quantidade, int codigo);
+void add_produto(Produto aux);
 void ver();
 void apagar();
 
 
-void salvar();
+void salvar(Produto aux);
 void ler();
 #endif
