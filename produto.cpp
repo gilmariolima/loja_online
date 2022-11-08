@@ -76,7 +76,7 @@ void salvar(){
 }
 
 void ler(){
-    Produto aux("","","","","",0,0,0);
+    Produto aux("porra","","","","",0,0,0);
     ifstream arq;
     arq.open("dados.dat", ios_base::in|ios_base::binary);
     arq.read((char*)&aux, sizeof(Produto));
