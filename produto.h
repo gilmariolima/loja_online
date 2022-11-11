@@ -48,4 +48,5 @@ void add_produto(string nome, string tamanho, string categoria, string cor, stri
 
 void salvar(Produto aux);
 void ler();
+void apagar(int codigo);
 #endif

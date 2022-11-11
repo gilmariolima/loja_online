@@ -52,8 +52,12 @@ void add_produto(string nome, string tamanho, string categoria, string cor, stri
 }
 
 void ver(){
+    cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
     for(int i=0; i<estoque.size();i++){
-        cout << estoque[i].get_nome_produto() << "-" << estoque[i].get_preco() << "-" <<estoque[i].get_quantidade()<< endl;
+        cout <<estoque[i].get_nome_produto()<<"\t\t";
+        cout << estoque[i].get_preco()<<"\t\t";
+        cout <<  estoque[i].get_quantidade()<<"\t\t";
+        cout <<estoque[i].get_codigo()<<endl;
     }
     cout << endl;
 }
@@ -69,6 +73,25 @@ void ler(){
     arq.close();
 }
 
+void apagar(int codigo){
+    Produto aux;
+    ifstream arq;
+    ofstream fout;
+    
+    arq.open("estoque.dat",ios_base::binary);
+    fout.open("novo.dat",ios_base::binary|ios_base::app);
+
+    while(arq.read((char*)&aux, sizeof(Produto))){
+        if(aux.get_codigo() != codigo){
+            fout.write((char*)&aux, sizeof(Produto));  
+        }
+    }
+    fout.close();
+    arq.close();
+    remove("estoque.dat");
+    rename("novo.dat","estoque.dat");  
+}
+
 void menu(){
     int opc = 1;
     string nome,tamanho,categoria,cor,material;
@@ -78,6 +101,7 @@ void menu(){
     while(opc != 0){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
+        cout << "[ 3 ] Apagar Produto\n";
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
@@ -98,6 +122,11 @@ void menu(){
                 system("cls");
                 ler();
                 ver();
+                break;
+            case 3:
+                cout << "Codigo: ";
+                cin >> codigo; 
+                apagar(codigo);
                 break;
             default:
                 break;
