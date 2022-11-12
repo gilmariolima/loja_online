@@ -28,6 +28,18 @@ void Produto :: set_quantidade(int quantidade){
 void Produto :: set_codigo(int codigo){
     this->codigo = codigo;
 }
+
+void Produto :: dados(){
+    cout << " Nome: " << get_nome_produto() << endl;
+    cout << " Tamanho: " << get_tamanho() << endl;
+    cout << " Categoria: " << get_categoria() << endl;
+    cout << " Cor: " << get_cor() << endl;
+    cout << " Material: " << get_material() << endl;
+    cout << " Preco: " << get_preco() << endl;
+    cout << " Quantidade: " << get_quantidade() << endl;
+    cout << " Codigo: " << get_codigo() << endl;
+}
+
 string Produto :: get_nome_produto(){return nome;}
 string Produto :: get_tamanho(){return tamanho;}
 string Produto :: get_categoria(){return categoria;}
@@ -44,7 +56,19 @@ void salvar(Produto aux){
     arq.close();
 }
 
-void add_produto(string nome, string tamanho, string categoria, string cor, string material, float preco, int quantidade, int codigo){
+void add_produto(){
+    string nome,tamanho,categoria,cor,material;
+    double preco;
+    int quantidade,codigo;
+
+    cout << "Nome: "; cin >> nome;
+    cout << "Tamanho: "; cin >> tamanho;
+    cout << "Categoria: "; cin >> categoria;
+    cout << "Cor: "; cin >> cor;
+    cout << "Material: "; cin >> material;
+    cout << "Preco R$: "; cin >> preco;
+    cout << "Quantidade: "; cin >> quantidade;
+    cout << "Codigo: "; cin >> codigo;
     Produto novo(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
     salvar(novo);
     system("cls");
@@ -92,44 +116,45 @@ void apagar(int codigo){
     rename("novo.dat","estoque.dat");  
 }
 
-void menu(){
-    int opc = 1;
-    string nome,tamanho,categoria,cor,material;
-    double preco;
-    int quantidade,codigo;
 
+void menu(){
+    ler();
+    int opc = 1;
     while(opc != 0){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
         cout << "[ 3 ] Apagar Produto\n";
+        cout << "[ 4 ] Editar\n";
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
 
-        switch(opc){
-            case 1:
-                cout << "Nome: "; cin >> nome;
-                cout << "Tamanho: "; cin >> tamanho;
-                cout << "Categoria: "; cin >> categoria;
-                cout << "Cor: "; cin >> cor;
-                cout << "Material: "; cin >> material;
-                cout << "Preco R$: "; cin >> preco;
-                cout << "Quantidade: "; cin >> quantidade;
-                cout << "Codigo: "; cin >> codigo;
-                add_produto(nome,tamanho,categoria,cor,material,preco,quantidade,codigo);
-                break;
-            case 2:
-                system("cls");
-                ler();
-                ver();
-                break;
-            case 3:
-                cout << "Codigo: ";
-                cin >> codigo; 
-                apagar(codigo);
-                break;
-            default:
-                break;
+        if(opc == 1){
+            add_produto();
+        }else if(opc == 2){
+            system("cls");
+            ler();
+            ver();
+        }else if(opc == 3){
+            int codigo;
+            cout << "Codigo: ";
+            cin >> codigo; 
+            apagar(codigo);
+        }else if(opc == 4){
+            int codigo;
+            cout << "Codigo: ";
+            cin >> codigo;
+            for(int i=0; i<estoque.size();i++){
+                if(estoque[i].get_codigo() == codigo){
+                    estoque[i].dados();
+                }
+            } 
+            cout << endl;
+            apagar(codigo);
+            add_produto();
+            
+        }else{
+            cout << "invalido" << endl;
         }
     }
 }

@@ -39,14 +39,16 @@ class Produto{
         double get_preco();
         int get_quantidade();
         int get_codigo();
+        void dados();
 };
 
 void menu();
 void ver();
 void apagar();
-void add_produto(string nome, string tamanho, string categoria, string cor, string material, float preco, int quantidade, int codigo);
+void add_produto();
 
 void salvar(Produto aux);
 void ler();
 void apagar(int codigo);
+
 #endif
