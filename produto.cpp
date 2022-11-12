@@ -166,7 +166,7 @@ void menu(){
                 if(opcao == "1"){
                     ler();
                     ver();
-                    cout << "Codigo: "; cin >> codigo;
+                    cout << "\nCodigo: "; cin >> codigo;
                     system("cls");
                     procurar(codigo);
                 }else if(opcao == "2"){
@@ -204,7 +204,7 @@ void menu(){
                         cout << VERDE << "Editado" << RESET << endl;
                     }else{
                         system("cls");
-                        cout << "Codigo invalido" << endl;
+                        cout << VERMELHO << "Codigo Invalido" << RESET << endl;
                     }
                 }
             }
