@@ -8,10 +8,10 @@ using namespace std;
 class Produto{
     private:
         string nome, tamanho, categoria, cor, material;
-        double preco;
+        float preco;
         int quantidade, codigo;
     public:
-        Produto(string nome, string tamanho, string categoria, string cor, string material ,double preco, int quantidade, int codigo){ 
+        Produto(string nome, string tamanho, string categoria, string cor, string material ,float preco, int quantidade, int codigo){ 
             set_nome_produto(nome);
             set_tamanho(tamanho);
             set_categoria(categoria);
@@ -27,7 +27,7 @@ class Produto{
         void set_categoria(string categoria);
         void set_cor(string cor);
         void set_material(string material);
-        void set_preco(double preco);
+        void set_preco(float preco);
         void set_quantidade(int quantidade);
         void set_codigo(int codigo);
 
@@ -36,7 +36,7 @@ class Produto{
         string get_categoria();
         string get_cor();
         string get_material();
-        double get_preco();
+        float get_preco();
         int get_quantidade();
         int get_codigo();
         void dados();
@@ -45,7 +45,7 @@ class Produto{
 void menu();
 void ver();
 void apagar();
-void add_produto();
+void add_produto(string nome,string tamanho,string categoria,string cor,string material,float preco,int quantidade,int codigo);
 
 void salvar(Produto aux);
 void ler();

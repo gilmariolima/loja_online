@@ -2,6 +2,11 @@
 #include <vector>
 #include "produto.h"
 #include <fstream>
+
+#define VERMELHO "\x1b[31m"
+#define VERDE "\x1b[32m"
+#define RESET "\x1b[0m"
+
 vector<Produto> estoque;
 
 void Produto :: set_nome_produto(string nome){
@@ -19,7 +24,7 @@ void Produto :: set_cor(string cor){
 void Produto :: set_material(string material){
     this->material = material;
 }
-void Produto :: set_preco(double preco){
+void Produto :: set_preco(float preco){
     this->preco = preco;
 }
 void Produto :: set_quantidade(int quantidade){
@@ -30,14 +35,15 @@ void Produto :: set_codigo(int codigo){
 }
 
 void Produto :: dados(){
-    cout << " Nome: " << get_nome_produto() << endl;
-    cout << " Tamanho: " << get_tamanho() << endl;
-    cout << " Categoria: " << get_categoria() << endl;
-    cout << " Cor: " << get_cor() << endl;
-    cout << " Material: " << get_material() << endl;
-    cout << " Preco: " << get_preco() << endl;
-    cout << " Quantidade: " << get_quantidade() << endl;
-    cout << " Codigo: " << get_codigo() << endl;
+    cout << "Nome:       " << get_nome_produto() << endl;
+    cout << "Tamanho:    " << get_tamanho() << endl;
+    cout << "Categoria:  " << get_categoria() << endl;
+    cout << "Cor:        " << get_cor() << endl;
+    cout << "Material:   " << get_material() << endl;
+    cout << "Preco:      " << get_preco() << endl;
+    cout << "Quantidade: " << get_quantidade() << endl;
+    cout << "Codigo:     " << get_codigo() << endl;
+    cout << endl;
 }
 
 string Produto :: get_nome_produto(){return nome;}
@@ -45,7 +51,7 @@ string Produto :: get_tamanho(){return tamanho;}
 string Produto :: get_categoria(){return categoria;}
 string Produto :: get_cor(){return cor;}
 string Produto :: get_material(){return material;}
-double Produto :: get_preco(){return preco;}
+float Produto :: get_preco(){return preco;}
 int Produto :: get_quantidade(){return quantidade;}
 int Produto :: get_codigo(){return codigo;}
 
@@ -58,7 +64,7 @@ void salvar(Produto aux){
 
 void add_produto(){
     string nome,tamanho,categoria,cor,material;
-    double preco;
+    float preco;
     int quantidade,codigo;
 
     cout << "Nome: "; cin >> nome;
@@ -71,19 +77,37 @@ void add_produto(){
     cout << "Codigo: "; cin >> codigo;
     Produto novo(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
     salvar(novo);
-    system("cls");
-    cout << "Produto Cadastrado" << endl;
+}
+
+void procurar(int codigo){
+    for(int i=0; i<estoque.size(); i++){
+        if(estoque[i].get_codigo() == codigo){
+            estoque[i].dados();
+        }
+    }
 }
 
 void ver(){
-    cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
-    for(int i=0; i<estoque.size();i++){
-        cout <<estoque[i].get_nome_produto()<<"\t\t";
-        cout << estoque[i].get_preco()<<"\t\t";
-        cout <<  estoque[i].get_quantidade()<<"\t\t";
-        cout <<estoque[i].get_codigo()<<endl;
+    string opc = "1";
+    while(opc != "0"){
+        cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
+        for(int i=0; i<estoque.size();i++){
+            cout << estoque[i].get_nome_produto()<<"\t\t";
+            cout << estoque[i].get_preco()<<"\t\t";
+            cout << estoque[i].get_quantidade()<<"\t\t";
+            cout << estoque[i].get_codigo()<<endl;
+        }
+        cout << "\n[ 1 ] Procurar Produto" << endl;
+        cout << "[ 0 ] Sair" << endl;
+        cout << ">> "; cin >> opc;
+        system("cls");
+        if(opc == "1"){
+            int codigo;
+            cout << "Codigo: "; cin >> codigo;
+            system("cls");
+            procurar(codigo);
+        }
     }
-    cout << endl;
 }
 
 void ler(){
@@ -101,6 +125,7 @@ void apagar(int codigo){
     Produto aux;
     ifstream arq;
     ofstream fout;
+    bool achei = false;
     
     arq.open("estoque.dat",ios_base::binary);
     fout.open("novo.dat",ios_base::binary|ios_base::app);
@@ -108,7 +133,16 @@ void apagar(int codigo){
     while(arq.read((char*)&aux, sizeof(Produto))){
         if(aux.get_codigo() != codigo){
             fout.write((char*)&aux, sizeof(Produto));  
+        }else{
+            achei = true;
         }
+    }
+    if(achei == true){
+        system("cls");
+        cout << VERMELHO << "Produto Apagado" << RESET << endl;
+    }else{
+        system("cls");
+        cout << VERMELHO << "Codigo Invalido" << RESET << endl;
     }
     fout.close();
     arq.close();
@@ -116,11 +150,11 @@ void apagar(int codigo){
     rename("novo.dat","estoque.dat");  
 }
 
-
 void menu(){
     ler();
-    int opc = 1;
-    while(opc != 0){
+    system("cls");
+    string opc = "1";
+    while(opc != "0"){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
         cout << "[ 3 ] Apagar Produto\n";
@@ -128,33 +162,39 @@ void menu(){
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
+        system("cls");
 
-        if(opc == 1){
+        if(opc == "1"){
             add_produto();
-        }else if(opc == 2){
             system("cls");
+            cout << VERDE << "Produto Cadastrado" << RESET << endl;
+        }else if(opc == "2"){
             ler();
             ver();
-        }else if(opc == 3){
+            system("cls");
+        }else if(opc == "3"){
             int codigo;
             cout << "Codigo: ";
             cin >> codigo; 
             apagar(codigo);
-        }else if(opc == 4){
-            int codigo;
+        }else if(opc == "4"){
+            int codigo; bool achei = false;
             cout << "Codigo: ";
             cin >> codigo;
             for(int i=0; i<estoque.size();i++){
                 if(estoque[i].get_codigo() == codigo){
                     estoque[i].dados();
+                    achei = true;
                 }
             } 
             cout << endl;
-            apagar(codigo);
-            add_produto();
-            
-        }else{
-            cout << "invalido" << endl;
+            if(achei == true){
+                apagar(codigo);
+                add_produto();
+            }else{
+                system("cls");
+                cout << "Codigo invalido" << endl;
+            }
         }
     }
 }
