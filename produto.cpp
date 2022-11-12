@@ -87,29 +87,6 @@ void procurar(int codigo){
     }
 }
 
-void ver(){
-    string opc = "1";
-    while(opc != "0"){
-        cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
-        for(int i=0; i<estoque.size();i++){
-            cout << estoque[i].get_nome_produto()<<"\t\t";
-            cout << estoque[i].get_preco()<<"\t\t";
-            cout << estoque[i].get_quantidade()<<"\t\t";
-            cout << estoque[i].get_codigo()<<endl;
-        }
-        cout << "\n[ 1 ] Procurar Produto" << endl;
-        cout << "[ 0 ] Sair" << endl;
-        cout << ">> "; cin >> opc;
-        system("cls");
-        if(opc == "1"){
-            int codigo;
-            cout << "Codigo: "; cin >> codigo;
-            system("cls");
-            procurar(codigo);
-        }
-    }
-}
-
 void ler(){
     estoque.clear();
     Produto novo;
@@ -121,7 +98,19 @@ void ler(){
     arq.close();
 }
 
-void apagar(int codigo){
+void ver(){
+    cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
+    for(int i=0; i<estoque.size();i++){
+        cout << estoque[i].get_nome_produto()<<"\t\t";
+        cout << estoque[i].get_preco()<<"\t\t";
+        cout << estoque[i].get_quantidade()<<"\t\t";
+        cout << estoque[i].get_codigo()<<endl;
+    }
+}
+
+
+
+bool apagar(int codigo){
     Produto aux;
     ifstream arq;
     ofstream fout;
@@ -137,13 +126,7 @@ void apagar(int codigo){
             achei = true;
         }
     }
-    if(achei == true){
-        system("cls");
-        cout << VERMELHO << "Produto Apagado" << RESET << endl;
-    }else{
-        system("cls");
-        cout << VERMELHO << "Codigo Invalido" << RESET << endl;
-    }
+    
     fout.close();
     arq.close();
     remove("estoque.dat");
@@ -157,8 +140,7 @@ void menu(){
     while(opc != "0"){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
-        cout << "[ 3 ] Apagar Produto\n";
-        cout << "[ 4 ] Editar\n";
+
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
@@ -169,31 +151,62 @@ void menu(){
             system("cls");
             cout << VERDE << "Produto Cadastrado" << RESET << endl;
         }else if(opc == "2"){
-            ler();
-            ver();
-            system("cls");
-        }else if(opc == "3"){
             int codigo;
-            cout << "Codigo: ";
-            cin >> codigo; 
-            apagar(codigo);
-        }else if(opc == "4"){
-            int codigo; bool achei = false;
-            cout << "Codigo: ";
-            cin >> codigo;
-            for(int i=0; i<estoque.size();i++){
-                if(estoque[i].get_codigo() == codigo){
-                    estoque[i].dados();
-                    achei = true;
-                }
-            } 
-            cout << endl;
-            if(achei == true){
-                apagar(codigo);
-                add_produto();
-            }else{
+            string opcao = "1";
+            while(opcao != "0"){
+                ler();
+                ver();
+                cout << "\n[ 1 ] Procurar Produto" << endl;
+                cout << "[ 2 ] Apagar Produto" << endl;
+                cout << "[ 3 ] Editar" << endl;
+                cout << "[ 0 ] Sair" << endl;
+                cout << ">> "; cin >> opcao;
                 system("cls");
-                cout << "Codigo invalido" << endl;
+                
+                if(opcao == "1"){
+                    ler();
+                    ver();
+                    cout << "Codigo: "; cin >> codigo;
+                    system("cls");
+                    procurar(codigo);
+                }else if(opcao == "2"){
+                    ler();
+                    ver();
+                    int codigo; bool achei;
+                    cout << "\nCodigo: ";
+                    cin >> codigo; 
+                    achei = apagar(codigo);
+                    if(achei == true){
+                        system("cls");
+                        cout << VERMELHO << "Produto Apagado" << RESET << endl;
+                    }else{
+                        system("cls");
+                        cout << VERMELHO << "Codigo Invalido" << RESET << endl;
+                    }
+                }else if(opcao == "3"){
+                    ler();
+                    ver();
+                    int codigo; bool achei = false;
+                    cout << "\nCodigo: ";
+                    cin >> codigo;
+                    system("cls");
+                    for(int i=0; i<estoque.size();i++){
+                        if(estoque[i].get_codigo() == codigo){
+                            estoque[i].dados();
+                            achei = true;
+                        }
+                    } 
+                    cout << endl;
+                    if(achei == true){
+                        apagar(codigo);
+                        add_produto();
+                        system("cls");
+                        cout << VERDE << "Editado" << RESET << endl;
+                    }else{
+                        system("cls");
+                        cout << "Codigo invalido" << endl;
+                    }
+                }
             }
         }
     }

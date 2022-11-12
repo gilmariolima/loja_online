@@ -44,11 +44,10 @@ class Produto{
 
 void menu();
 void ver();
-void apagar();
 void add_produto(string nome,string tamanho,string categoria,string cor,string material,float preco,int quantidade,int codigo);
 
 void salvar(Produto aux);
 void ler();
-void apagar(int codigo);
+bool apagar(int codigo);
 
 #endif
