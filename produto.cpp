@@ -99,12 +99,16 @@ void ler(){
 }
 
 void ver(){
-    cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
-    for(int i=0; i<estoque.size();i++){
-        cout << estoque[i].get_nome_produto()<<"\t\t";
-        cout << estoque[i].get_preco()<<"\t\t";
-        cout << estoque[i].get_quantidade()<<"\t\t";
-        cout << estoque[i].get_codigo()<<endl;
+    if(estoque.size() > 0){
+        cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
+        for(int i=0; i<estoque.size();i++){
+            cout << estoque[i].get_nome_produto()<<"\t\t";
+            cout << estoque[i].get_preco()<<"\t\t";
+            cout << estoque[i].get_quantidade()<<"\t\t";
+            cout << estoque[i].get_codigo()<<endl;
+        }
+    }else{
+        cout << VERMELHO << "Estoque Vazio" << RESET << endl;
     }
 }
 
@@ -130,7 +134,8 @@ bool apagar(int codigo){
     fout.close();
     arq.close();
     remove("estoque.dat");
-    rename("novo.dat","estoque.dat");  
+    rename("novo.dat","estoque.dat");
+    return achei;  
 }
 
 void menu(){
@@ -140,7 +145,6 @@ void menu(){
     while(opc != "0"){
         cout << "[ 1 ] Cadastrar Produtos\n";
         cout << "[ 2 ] Ver Estoque\n";
-
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
