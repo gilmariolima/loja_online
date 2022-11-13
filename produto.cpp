@@ -80,10 +80,16 @@ void add_produto(){
 }
 
 void procurar(int codigo){
-    for(int i=0; i<estoque.size(); i++){
-        if(estoque[i].get_codigo() == codigo){
-            estoque[i].dados();
+    string opc = "1";
+    while(opc != "0"){
+        for(int i=0; i<estoque.size(); i++){
+            if(estoque[i].get_codigo() == codigo){
+                estoque[i].dados();
+            }
         }
+        cout << "[ 0 ] Sair" << endl;
+        cout << ">> "; cin >> opc;
+        system("cls");
     }
 }
 
@@ -111,8 +117,6 @@ void ver(){
         cout << VERMELHO << "Estoque Vazio" << RESET << endl;
     }
 }
-
-
 
 bool apagar(int codigo){
     Produto aux;
@@ -166,16 +170,14 @@ void menu(){
                 cout << "[ 0 ] Sair" << endl;
                 cout << ">> "; cin >> opcao;
                 system("cls");
+                ler();
+                ver();
                 
                 if(opcao == "1"){
-                    ler();
-                    ver();
                     cout << "\nCodigo: "; cin >> codigo;
                     system("cls");
                     procurar(codigo);
                 }else if(opcao == "2"){
-                    ler();
-                    ver();
                     int codigo; bool achei;
                     cout << "\nCodigo: ";
                     cin >> codigo; 
@@ -188,8 +190,6 @@ void menu(){
                         cout << VERMELHO << "Codigo Invalido" << RESET << endl;
                     }
                 }else if(opcao == "3"){
-                    ler();
-                    ver();
                     int codigo; bool achei = false;
                     cout << "\nCodigo: ";
                     cin >> codigo;
@@ -210,6 +210,11 @@ void menu(){
                         system("cls");
                         cout << VERMELHO << "Codigo Invalido" << RESET << endl;
                     }
+                }else if(opcao == "0"){
+                    system("cls");
+                }else{
+                    system("cls");
+                    cout << VERMELHO <<"Invalido" << RESET <<endl;
                 }
             }
         }
