@@ -3,6 +3,7 @@
 #include "produto.h"
 #include <fstream>
 
+
 #define VERMELHO "\x1b[31m"
 #define VERDE "\x1b[32m"
 #define RESET "\x1b[0m"
@@ -67,11 +68,11 @@ void add_produto(){
     float preco;
     int quantidade,codigo;
 
-    cout << "Nome: "; cin >> nome;
-    cout << "Tamanho: "; cin >> tamanho;
-    cout << "Categoria: "; cin >> categoria;
-    cout << "Cor: "; cin >> cor;
-    cout << "Material: "; cin >> material;
+    cout << "Nome: "; cin.ignore(); getline(cin, nome);
+    cout << "Tamanho: "; cin.ignore(); getline(cin, tamanho);
+    cout << "Categoria: "; cin.ignore(); getline(cin, categoria);
+    cout << "Cor: "; cin.ignore(); getline(cin, cor);
+    cout << "Material: "; cin.ignore(); getline(cin, material);
     cout << "Preco R$: "; cin >> preco;
     cout << "Quantidade: "; cin >> quantidade;
     cout << "Codigo: "; cin >> codigo;
