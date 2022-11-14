@@ -2,8 +2,11 @@
 #include <vector>
 #include "produto.h"
 #include <fstream>
+#include <cstring>
+#include<ios>    
+#include<limits>
 
-
+using namespace std;
 #define VERMELHO "\x1b[31m"
 #define VERDE "\x1b[32m"
 #define RESET "\x1b[0m"
@@ -68,11 +71,12 @@ void add_produto(){
     float preco;
     int quantidade,codigo;
 
-    cout << "Nome: "; cin.ignore(); getline(cin, nome);
-    cout << "Tamanho: "; cin.ignore(); getline(cin, tamanho);
-    cout << "Categoria: "; cin.ignore(); getline(cin, categoria);
-    cout << "Cor: "; cin.ignore(); getline(cin, cor);
-    cout << "Material: "; cin.ignore(); getline(cin, material);
+    cout << "Nome: ";
+    fflush(stdin);  getline(cin, nome); fflush(stdin);
+    cout << "Tamanho: ";getline(cin, tamanho); fflush(stdin);
+    cout << "Categoria: "; getline(cin, categoria); fflush(stdin);
+    cout << "Cor: "; getline(cin, cor);fflush(stdin);
+    cout << "Material: ";getline(cin, material);fflush(stdin);
     cout << "Preco R$: "; cin >> preco;
     cout << "Quantidade: "; cin >> quantidade;
     cout << "Codigo: "; cin >> codigo;
@@ -81,16 +85,34 @@ void add_produto(){
 }
 
 void procurar(int codigo){
-    string opc = "1";
-    while(opc != "0"){
-        for(int i=0; i<estoque.size(); i++){
-            if(estoque[i].get_codigo() == codigo){
-                estoque[i].dados();
-            }
+    string opc = "1"; bool achei = false;
+
+    for(int i=0; i<estoque.size(); i++){
+        if(estoque[i].get_codigo() == codigo){
+            estoque[i].dados();
+            achei = true;
         }
+    }
+    if(achei == false) cout <<VERMELHO<< "Nao encontrado\n" <<RESET<<endl;
+    
+    while(opc != "0"){
+        cout << "[ 1 ] Procurar Outro" << endl;
         cout << "[ 0 ] Sair" << endl;
         cout << ">> "; cin >> opc;
         system("cls");
+
+        if(opc == "1"){
+            ver();
+            cout << "\nCodigo: "; cin >> codigo;
+            system("cls");
+            procurar(codigo);
+            return;
+        }else if(opc == "0"){
+            system("cls");
+        }else{
+            system("cls");
+            cout << "Invalido" << endl;
+        }
     }
 }
 
