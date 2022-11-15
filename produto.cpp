@@ -128,15 +128,18 @@ void ler(){
 void ver(){
     if(estoque.size() > 0){
         cout << VERMELHO "--- ESTOQUE ---  "<<estoque.size();
-        if(estoque.size() == 1)cout << " item\n"<< RESET << endl;
-        else if(estoque.size() > 1)cout << " itens\n" << RESET << endl;
+        if(estoque.size() == 1)cout << " item"<< RESET << endl;
+        else if(estoque.size() > 1)cout << " itens" << RESET << endl;
         
+        cout << VERMELHO <<"_______________________________________________________________"<< RESET <<endl;
         for(int i=0; i<estoque.size();i++){ 
-            cout <<"Produto: "<<estoque[i].get_nome_produto()<<endl;
-            cout <<"R$ "<<estoque[i].get_preco()<<endl;
-            cout <<"Qntd: "<<estoque[i].get_quantidade()<<endl;
+            cout << endl;
+            cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
+            cout <<"R$ "<<estoque[i].get_preco()<<"    ";
+            cout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
+            cout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
             cout <<"Cod: "<< estoque[i].get_codigo()<<endl;
-            cout << VERMELHO <<"----------------------------"<< RESET <<endl;
+            cout << VERMELHO <<"_______________________________________________________________"<< RESET <<endl;
         }
     }else{
         cout << VERMELHO << "Estoque Vazio" << RESET << endl;
@@ -171,14 +174,17 @@ void emitir_relatorio(int cod){
     ofstream fout;
     if(cod == 1){
         fout.open("inventario.txt");
-        fout << "---ESTOQUE---"<< endl;
+        fout << "ESTOQUE"<< endl;
+        fout <<"_______________________________________________________________"<< endl;
         for(int i=0; i<estoque.size(); i++){
-            fout << "Prod: " << estoque[i].get_nome_produto() << "  -  ";
-            fout << "Cod: " << estoque[i].get_codigo() <<endl;
-            fout << "Qntd: "<< estoque[i].get_quantidade() << "\t\t";
-            fout << "Tam: "<< estoque[i].get_tamanho() << "\t\t";
-            fout << "Cor: "<< estoque[i].get_cor() << endl;
-            fout << "--------------------------------------"<<endl;
+            fout << endl;
+            fout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
+            fout <<"R$ "<<estoque[i].get_preco()<<"    ";
+            fout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
+            fout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
+            fout <<"Cod: "<< estoque[i].get_codigo()<<endl;
+            fout <<"_______________________________________________________________"<< endl;
+
         }
     }
 }
