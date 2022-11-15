@@ -1,12 +1,10 @@
 #include <iostream>
+#include <fstream>
+#include <unistd.h>
 #include <vector>
 #include "produto.h"
-#include <fstream>
-#include <cstring>
-#include<ios>    
-#include<limits>
+#include "pessoa.h"
 
-using namespace std;
 #define VERMELHO "\x1b[31m"
 #define VERDE "\x1b[32m"
 #define RESET "\x1b[0m"
@@ -39,14 +37,14 @@ void Produto :: set_codigo(int codigo){
 }
 
 void Produto :: dados(){
-    cout << "Nome:       " << get_nome_produto() << endl;
-    cout << "Tamanho:    " << get_tamanho() << endl;
-    cout << "Categoria:  " << get_categoria() << endl;
-    cout << "Cor:        " << get_cor() << endl;
-    cout << "Material:   " << get_material() << endl;
-    cout << "Preco:      " << get_preco() << endl;
-    cout << "Quantidade: " << get_quantidade() << endl;
-    cout << "Codigo:     " << get_codigo() << endl;
+    cout << "Nome:       "<<RESET << get_nome_produto() << endl;
+    cout << "Tamanho:    "<<RESET << get_tamanho() << endl;
+    cout << "Categoria:  "<<RESET << get_categoria() << endl;
+    cout << "Cor:        "<<RESET << get_cor() << endl;
+    cout << "Material:   "<<RESET << get_material() << endl;
+    cout << "Preco:      "<<RESET << get_preco() << endl;
+    cout << "Quantidade: "<<RESET << get_quantidade() << endl;
+    cout << "Codigo:     "<<RESET << get_codigo() << endl;
     cout << endl;
 }
 
@@ -75,8 +73,8 @@ void add_produto(){
     fflush(stdin);  getline(cin, nome); fflush(stdin);
     cout << "Tamanho: ";getline(cin, tamanho); fflush(stdin);
     cout << "Categoria: "; getline(cin, categoria); fflush(stdin);
-    cout << "Cor: "; getline(cin, cor);fflush(stdin);
-    cout << "Material: ";getline(cin, material);fflush(stdin);
+    cout << "Cor: "; getline(cin, cor); fflush(stdin);
+    cout << "Material: ";getline(cin, material); fflush(stdin);
     cout << "Preco R$: "; cin >> preco;
     cout << "Quantidade: "; cin >> quantidade;
     cout << "Codigo: "; cin >> codigo;
@@ -129,12 +127,16 @@ void ler(){
 
 void ver(){
     if(estoque.size() > 0){
-        cout <<"Nome\t\tPreco R$\tQuantidade\tCodigo" <<endl; 
-        for(int i=0; i<estoque.size();i++){
-            cout << estoque[i].get_nome_produto()<<"\t\t";
-            cout << estoque[i].get_preco()<<"\t\t";
-            cout << estoque[i].get_quantidade()<<"\t\t";
-            cout << estoque[i].get_codigo()<<endl;
+        cout << VERMELHO "--- ESTOQUE ---  "<<estoque.size();
+        if(estoque.size() == 1)cout << " item\n"<< RESET << endl;
+        else if(estoque.size() > 1)cout << " itens\n" << RESET << endl;
+        
+        for(int i=0; i<estoque.size();i++){ 
+            cout <<"Produto: "<<estoque[i].get_nome_produto()<<endl;
+            cout <<"R$ "<<estoque[i].get_preco()<<endl;
+            cout <<"Qntd: "<<estoque[i].get_quantidade()<<endl;
+            cout <<"Cod: "<< estoque[i].get_codigo()<<endl;
+            cout << VERMELHO <<"----------------------------"<< RESET <<endl;
         }
     }else{
         cout << VERMELHO << "Estoque Vazio" << RESET << endl;
@@ -165,57 +167,89 @@ bool apagar(int codigo){
     return achei;  
 }
 
+void emitir_relatorio(int cod){
+    ofstream fout;
+    if(cod == 1){
+        fout.open("inventario.txt");
+        fout << "---ESTOQUE---"<< endl;
+        for(int i=0; i<estoque.size(); i++){
+            fout << "Prod: " << estoque[i].get_nome_produto() << "  -  ";
+            fout << "Cod: " << estoque[i].get_codigo() <<endl;
+            fout << "Qntd: "<< estoque[i].get_quantidade() << "\t\t";
+            fout << "Tam: "<< estoque[i].get_tamanho() << "\t\t";
+            fout << "Cor: "<< estoque[i].get_cor() << endl;
+            fout << "--------------------------------------"<<endl;
+        }
+    }
+}
+
 void menu(){
     ler();
     system("cls");
     string opc = "1";
+    
     while(opc != "0"){
-        cout << "[ 1 ] Cadastrar Produtos\n";
-        cout << "[ 2 ] Ver Estoque\n";
-        cout << "[ 0 ] Sair\n";
+        cout << VERDE "--- MENU ---\n" << RESET << endl;
+        cout << "[ 1 ] Cadastrar Produtos" << endl;
+        cout << "[ 2 ] Ver Estoque" << endl;
+        cout << "[ 3 ] Emitir Relatorios" << endl;
+        cout << "[ 0 ] Sair" << endl;
         cout << ">> ";
         cin >> opc;
         system("cls");
 
         if(opc == "1"){
+            cout << VERDE "--- CADASTRAR PRODUTO ---\n" << RESET << endl;
             add_produto();
             system("cls");
-            cout << VERDE << "Produto Cadastrado" << RESET << endl;
+            cout << VERDE << "Cadastrando Produto..." << RESET << endl;
+            sleep(1);
+            system("cls");
         }else if(opc == "2"){
             int codigo;
             string opcao = "1";
             while(opcao != "0"){
                 ler();
+                if(estoque.size() == 0){
+                    cout << VERMELHO "Estoque Vazio" << RESET << endl;
+                    sleep(1); system("cls");
+                    break;
+                }
                 ver();
                 cout << "\n[ 1 ] Procurar Produto" << endl;
-                cout << "[ 2 ] Apagar Produto" << endl;
+                cout << "[ 2 ] Deletar Produto" << endl;
                 cout << "[ 3 ] Editar" << endl;
                 cout << "[ 0 ] Sair" << endl;
                 cout << ">> "; cin >> opcao;
                 system("cls");
-                ler();
-                ver();
+                ler(); ver();
                 
                 if(opcao == "1"){
+                    cout << VERDE "\n--- PROCURAR PRODUTO ---" << RESET << endl;
                     cout << "\nCodigo: "; cin >> codigo;
                     system("cls");
                     procurar(codigo);
                 }else if(opcao == "2"){
+                    cout << VERDE "\n--- DELETAR PRODUTO ---" << RESET << endl;
                     int codigo; bool achei;
                     cout << "\nCodigo: ";
                     cin >> codigo; 
                     achei = apagar(codigo);
                     if(achei == true){
                         system("cls");
-                        cout << VERMELHO << "Produto Apagado" << RESET << endl;
+                        cout << VERMELHO << "Deletando Produto..." << RESET << endl;
+                        sleep(1);system("cls");
                     }else{
                         system("cls");
                         cout << VERMELHO << "Codigo Invalido" << RESET << endl;
+                        sleep(1);system("cls");
                     }
                 }else if(opcao == "3"){
+                    cout << VERDE "\n--- EDITAR ---" << RESET << endl;
                     int codigo; bool achei = false;
                     cout << "\nCodigo: ";
                     cin >> codigo;
+
                     system("cls");
                     for(int i=0; i<estoque.size();i++){
                         if(estoque[i].get_codigo() == codigo){
@@ -228,18 +262,54 @@ void menu(){
                         apagar(codigo);
                         add_produto();
                         system("cls");
-                        cout << VERDE << "Editado" << RESET << endl;
+                        cout << VERDE << "Alterando Dados..." << RESET << endl;
+                        sleep(1);system("cls");
                     }else{
-                        system("cls");
+                        
                         cout << VERMELHO << "Codigo Invalido" << RESET << endl;
+                        sleep(1);system("cls");
                     }
                 }else if(opcao == "0"){
                     system("cls");
                 }else{
-                    system("cls");
                     cout << VERMELHO <<"Invalido" << RESET <<endl;
+                    sleep(1); system("cls");
                 }
             }
+        }else if(opc == "3"){
+            ler();
+            string opt;
+            while(opt != "0"){
+                cout << VERDE "--- EMITIR RELATORIOS ---\n" << RESET << endl;
+                cout << "[ 1 ] Estoque" << endl;
+                cout << "[ 2 ] Vendas" << endl;
+                cout << "[ 3 ] Clientes Cadastrados" << endl;
+                cout << "[ 0 ] Sair" << endl;
+                cout << ">> ";
+                cin >> opt;
+                system("cls");
+
+                if(opt == "1"){
+                    emitir_relatorio(1);
+                    cout << VERDE "Emitindo relatorio..." << RESET << endl;
+                    sleep(1);system("cls");
+                }else if(opt == "2"){
+                    emitir_relatorio(2);
+                }else if(opt == "3"){
+                    emitir_relatorio(3);
+                }else if(opt == "0"){
+                    system("cls");
+                }else{
+                    system("cls");
+                    cout << "Invalido" << endl;
+                }
+            }
+        }else if(opc == "0"){
+            system("cls");
+            cout << "Encerrando..." << endl;
+            return;
+        }else{
+            cout << VERMELHO <<"Invalido" << RESET <<endl;
         }
     }
 }
