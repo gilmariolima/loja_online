@@ -7,6 +7,7 @@
 
 #define VERMELHO "\x1b[31m"
 #define VERDE "\x1b[32m"
+#define CIANO "\x1b[36m"
 #define RESET "\x1b[0m"
 
 vector<Produto> estoque;
@@ -193,7 +194,7 @@ void menu(){
     string opc = "1";
     
     while(opc != "0"){
-        cout << VERDE "--- MENU ---\n" << RESET << endl;
+        cout << CIANO "--- MENU ---\n" << RESET << endl;
         cout << "[ 1 ] Cadastrar Produtos" << endl;
         cout << "[ 2 ] Ver Estoque" << endl;
         cout << "[ 3 ] Emitir Relatorios" << endl;
@@ -229,12 +230,12 @@ void menu(){
                 ler(); ver();
                 
                 if(opcao == "1"){
-                    cout << VERDE "\n--- PROCURAR PRODUTO ---" << RESET << endl;
+                    cout << CIANO "\n--- PROCURAR PRODUTO ---" << RESET << endl;
                     cout << "\nCodigo: "; cin >> codigo;
                     system("cls");
                     procurar(codigo);
                 }else if(opcao == "2"){
-                    cout << VERDE "\n--- DELETAR PRODUTO ---" << RESET << endl;
+                    cout << VERMELHO "\n--- DELETAR PRODUTO ---" << RESET << endl;
                     int codigo; bool achei;
                     cout << "\nCodigo: ";
                     cin >> codigo; 
@@ -249,7 +250,7 @@ void menu(){
                         sleep(1);system("cls");
                     }
                 }else if(opcao == "3"){
-                    cout << VERDE "\n--- EDITAR ---" << RESET << endl;
+                    cout << CIANO "\n--- EDITAR ---" << RESET << endl;
                     int codigo; bool achei = false;
                     cout << "\nCodigo: ";
                     cin >> codigo;
@@ -261,15 +262,14 @@ void menu(){
                             achei = true;
                         }
                     } 
-                    cout << endl;
+
                     if(achei == true){
                         apagar(codigo);
                         add_produto();
                         system("cls");
-                        cout << VERDE << "Alterando Dados..." << RESET << endl;
+                        cout << CIANO << "Alterando Dados..." << RESET << endl;
                         sleep(1);system("cls");
                     }else{
-                        
                         cout << VERMELHO << "Codigo Invalido" << RESET << endl;
                         sleep(1);system("cls");
                     }
