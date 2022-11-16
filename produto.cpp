@@ -131,15 +131,14 @@ void ver(){
         if(estoque.size() == 1)cout << " item"<< RESET << endl;
         else if(estoque.size() > 1)cout << " itens" << RESET << endl;
         
-        cout << VERMELHO <<"_______________________________________________________________"<< RESET <<endl;
+        cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
         for(int i=0; i<estoque.size();i++){ 
-            cout << endl;
             cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
             cout <<"R$ "<<estoque[i].get_preco()<<"    ";
             cout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
             cout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
             cout <<"Cod: "<< estoque[i].get_codigo()<<endl;
-            cout << VERMELHO <<"_______________________________________________________________"<< RESET <<endl;
+            cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
         }
     }else{
         cout << VERMELHO << "Estoque Vazio" << RESET << endl;
@@ -175,15 +174,14 @@ void emitir_relatorio(int cod){
     if(cod == 1){
         fout.open("inventario.txt");
         fout << "ESTOQUE"<< endl;
-        fout <<"_______________________________________________________________"<< endl;
+        fout <<"-------------------------------------------------------------"<< endl;
         for(int i=0; i<estoque.size(); i++){
-            fout << endl;
             fout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
             fout <<"R$ "<<estoque[i].get_preco()<<"    ";
             fout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
             fout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
             fout <<"Cod: "<< estoque[i].get_codigo()<<endl;
-            fout <<"_______________________________________________________________"<< endl;
+            fout <<"-------------------------------------------------------------"<< endl;
 
         }
     }
