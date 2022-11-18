@@ -32,14 +32,14 @@ class Produto{
         void set_quantidade(int quantidade);
         void set_codigo(int codigo);
 
-        string get_nome_produto();
-        string get_tamanho();
-        string get_categoria();
-        string get_cor();                     // getters
-        string get_material();
-        float get_preco();
-        int get_quantidade();
-        int get_codigo();
+        string  get_nome_produto(){return nome;}
+        string  get_tamanho(){return tamanho;}
+        string  get_categoria(){return categoria;}
+        string  get_cor(){return cor;}              // getters
+        string  get_material(){return material;}
+        float  get_preco(){return preco;}
+        int  get_quantidade(){return quantidade;}
+        int  get_codigo(){return codigo;}
 
         void dados();
 };

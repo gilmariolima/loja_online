@@ -49,14 +49,7 @@ void Produto :: dados(){
     cout << endl;
 }
 
-string Produto :: get_nome_produto(){return nome;}
-string Produto :: get_tamanho(){return tamanho;}
-string Produto :: get_categoria(){return categoria;}
-string Produto :: get_cor(){return cor;}
-string Produto :: get_material(){return material;}
-float Produto :: get_preco(){return preco;}
-int Produto :: get_quantidade(){return quantidade;}
-int Produto :: get_codigo(){return codigo;}
+
 
 void salvar(Produto aux){
     ofstream arq;
