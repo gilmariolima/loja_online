@@ -93,7 +93,7 @@ void procurar(int codigo){
     }
     if(achei == false) cout <<VERMELHO<< "Nao encontrado\n" <<RESET<<endl;
     
-    while(opc != "0"){
+    while(true){
         cout << "[ 1 ] Procurar Outro" << endl;
         cout << "[ 0 ] Sair" << endl;
         cout << ">> "; cin >> opc;
@@ -107,6 +107,7 @@ void procurar(int codigo){
             return;
         }else if(opc == "0"){
             system("cls");
+            break;
         }else{
             system("cls");
             cout << "Invalido" << endl;
