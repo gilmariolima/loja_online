@@ -46,11 +46,11 @@ class Produto{
 
 void menu();
 void ver();
-void add_produto();
+void add_produto(string nome,string tamanho,string categoria,string cor,string material, float preco, int quantidade, int codigo);
 void editar(int codigo);
 void salvar(Produto aux);
 void ler();
-void procurar(int codigo);
+bool procurar(int codigo);
 bool apagar(int codigo);
 void emitir_relatorio(int cod);
 

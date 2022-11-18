@@ -49,8 +49,6 @@ void Produto :: dados(){
     cout << endl;
 }
 
-
-
 void salvar(Produto aux){
     ofstream arq;
     arq.open("estoque.dat", ios::binary | ios::app);
@@ -58,24 +56,12 @@ void salvar(Produto aux){
     arq.close();
 }
 
-void add_produto(){
-    string nome,tamanho,categoria,cor,material;
-    float preco;
-    int quantidade,codigo;
-
-    cout << "Nome: "; fflush(stdin); getline(cin, nome);
-    cout << "Tamanho: ";  fflush(stdin); getline(cin, tamanho);
-    cout << "Categoria: ";  fflush(stdin); getline(cin, categoria);
-    cout << "Cor: ";  fflush(stdin); getline(cin, cor);
-    cout << "Material: ";  fflush(stdin); getline(cin, material);
-    cout << "Preco R$: "; cin >> preco;
-    cout << "Quantidade: "; cin >> quantidade;
-    cout << "Codigo: "; cin >> codigo;
+void add_produto(string nome,string tamanho,string categoria,string cor,string material, float preco, int quantidade, int codigo){
     Produto novo(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
     salvar(novo);
 }
 
-void procurar(int codigo){
+bool procurar(int codigo){
     string opc = "1"; bool achei = false;
 
     for(int i=0; i<estoque.size(); i++){
@@ -85,27 +71,7 @@ void procurar(int codigo){
         }
     }
     if(achei == false) cout <<VERMELHO<< "Nao encontrado\n" <<RESET<<endl;
-    
-    while(true){
-        cout << "[ 1 ] Procurar Outro" << endl;
-        cout << "[ 0 ] Sair" << endl;
-        cout << ">> "; cin >> opc;
-        system("cls");
-
-        if(opc == "1"){
-            ver();
-            cout << "\nCodigo: "; cin >> codigo;
-            system("cls");
-            procurar(codigo);
-            return;
-        }else if(opc == "0"){
-            system("cls");
-            break;
-        }else{
-            system("cls");
-            cout << "Invalido" << endl;
-        }
-    }
+    return achei;
 }
 
 void ler(){
@@ -181,11 +147,14 @@ void emitir_relatorio(int cod){
     }
 }
 
+
 void menu(){
     ler();
     system("cls");
     string opc;
-    
+    string nom, tam, cat, cor, mat;
+    float pre; int qntd, cod;
+
     while(true){
         cout << CIANO "--- MENU ---\n" << RESET << endl;
         cout << "[ 1 ] Cadastrar Produtos" << endl;
@@ -198,7 +167,15 @@ void menu(){
 
         if(opc == "1"){
             cout << VERDE "--- CADASTRAR PRODUTO ---\n" << RESET << endl;
-            add_produto();
+            cout << "Nome: "; fflush(stdin); getline(cin, nom);
+            cout << "Tamanho: ";  fflush(stdin); getline(cin, tam);
+            cout << "Categoria: ";  fflush(stdin); getline(cin, cat);
+            cout << "Cor: ";  fflush(stdin); getline(cin, cor);
+            cout << "Material: ";  fflush(stdin); getline(cin, mat);
+            cout << "Preco R$: "; cin >> pre;
+            cout << "Quantidade: "; cin >> qntd;
+            cout << "Codigo: "; cin >> cod;
+            add_produto(nom, tam, cat, cor, mat, pre, qntd, cod);
             system("cls");
             cout << VERDE << "Cadastrando Produto..." << RESET << endl;
             sleep(1);
@@ -223,10 +200,32 @@ void menu(){
                 ler(); ver();
                 
                 if(opcao == "1"){
-                    cout << CIANO "\n--- PROCURAR PRODUTO ---" << RESET << endl;
-                    cout << "\nCodigo: "; cin >> codigo;
-                    system("cls");
-                    procurar(codigo);
+                    string opt;
+                    while(true){
+                        cout << CIANO "\n--- PROCURAR PRODUTO ---" << RESET << endl;
+                        cout << "\nCodigo: "; cin >> codigo;
+                        system("cls");
+                        procurar(codigo);
+                        
+                        cout << "[ 1 ] Procurar outro" << endl;
+                        cout << "[ 0 ] Sair" << endl;
+                        cout << ">> "; cin >> opt;
+
+                        if(opt == "1"){    
+                            system("cls");
+                            ver();
+                        }else if(opt == "0"){
+                            system("cls");
+                            break;
+                        }else{
+                            system("cls");
+                            cout << VERMELHO << "Invalido"<< RESET;
+                            sleep(1); system("cls");
+                            ver();
+                        }
+                    }
+                    
+
                 }else if(opcao == "2"){
                     cout << VERMELHO "\n--- DELETAR PRODUTO ---" << RESET << endl;
                     int codigo; bool achei;
@@ -243,28 +242,60 @@ void menu(){
                         sleep(1);system("cls");
                     }
                 }else if(opcao == "3"){
+                    int codigo;
+                    bool achei = false;
+                    string op;
+                
                     cout << CIANO "\n--- EDITAR ---" << RESET << endl;
-                    int codigo; bool achei = false;
                     cout << "\nCodigo: ";
                     cin >> codigo;
-
                     system("cls");
-                    for(int i=0; i<estoque.size();i++){
-                        if(estoque[i].get_codigo() == codigo){
-                            estoque[i].dados();
-                            achei = true;
-                        }
-                    } 
 
-                    if(achei == true){
-                        apagar(codigo);
-                        add_produto();
-                        system("cls");
-                        cout << CIANO << "Alterando Dados..." << RESET << endl;
-                        sleep(1);system("cls");
-                    }else{
-                        cout << VERMELHO << "Codigo Invalido" << RESET << endl;
-                        sleep(1);system("cls");
+                    for(int i=0; i<estoque.size(); i++){
+                        if(estoque[i].get_codigo() == codigo){
+                            achei = true;
+                            nom = estoque[i].get_nome_produto();tam = estoque[i].get_tamanho();
+                            cat = estoque[i].get_categoria();mat = estoque[i].get_material();
+                            pre = estoque[i].get_preco();cor = estoque[i].get_cor();
+                            qntd = estoque[i].get_quantidade();cod = estoque[i].get_codigo();
+                            while(true){
+                                procurar(cod);
+                                
+                                cout << "[ 1 ] Nome" << endl; 
+                                cout << "[ 2 ] Tamanho" << endl; 
+                                cout << "[ 3 ] Categoria" << endl; 
+                                cout << "[ 4 ] Cor" << endl; 
+                                cout << "[ 5 ] Material" << endl; 
+                                cout << "[ 6 ] Preco" << endl; 
+                                cout << "[ 7 ] Quantidade" << endl; 
+                                cout << "[ 8 ] Codigo" << endl;
+                                cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
+
+                                cout << "\nO que deseja alterar: ";
+                                fflush(stdin); cin >> op;
+
+                                system("cls");
+                                if(op == "1"){cout << "Nome: "; fflush(stdin); getline(cin, nom); estoque[i].set_nome_produto(nom);}
+                                else if(op == "2"){cout << "Tamanho: "; fflush(stdin); getline(cin, tam);estoque[i].set_tamanho(tam);}
+                                else if(op == "3"){cout << "Categoria: "; fflush(stdin); getline(cin, cat);estoque[i].set_categoria(cat);}
+                                else if(op == "4"){cout << "Cor: "; fflush(stdin); getline(cin, cor);estoque[i].set_cor(cor);}
+                                else if(op == "5"){cout << "Material: "; fflush(stdin); getline(cin, mat); estoque[i].set_material(mat);}
+                                else if(op == "6"){cout << "Preco: "; cin >> pre; estoque[i].set_preco(pre);}
+                                else if(op == "7"){cout << "Quantidade: "; cin >> qntd; estoque[i].set_quantidade(qntd);}
+                                else if(op == "8"){cout << "Codigo: "; cin >> cod; estoque[i].set_codigo(cod);}
+                                else if(op == "0")break;
+                                if(op != "0"){
+                                    system("cls");
+                                    cout << CIANO << "Alterando dados..." << RESET << endl;
+                                    sleep(1);system("cls");
+                                }else cout << "Invalido" << endl;
+                            }
+                            apagar(codigo);
+                            add_produto(nom, tam, cat, cor, mat, pre, qntd, cod);
+                            system("cls");
+                            cout << CIANO << "Salvando..." << RESET << endl;
+                            sleep(1);system("cls");    
+                        }
                     }
                 }else if(opcao == "0"){
                     system("cls");
