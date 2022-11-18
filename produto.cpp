@@ -70,12 +70,11 @@ void add_produto(){
     float preco;
     int quantidade,codigo;
 
-    cout << "Nome: ";
-    fflush(stdin);  getline(cin, nome); fflush(stdin);
-    cout << "Tamanho: ";getline(cin, tamanho); fflush(stdin);
-    cout << "Categoria: "; getline(cin, categoria); fflush(stdin);
-    cout << "Cor: "; getline(cin, cor); fflush(stdin);
-    cout << "Material: ";getline(cin, material); fflush(stdin);
+    cout << "Nome: "; fflush(stdin); getline(cin, nome);
+    cout << "Tamanho: ";  fflush(stdin); getline(cin, tamanho);
+    cout << "Categoria: ";  fflush(stdin); getline(cin, categoria);
+    cout << "Cor: ";  fflush(stdin); getline(cin, cor);
+    cout << "Material: ";  fflush(stdin); getline(cin, material);
     cout << "Preco R$: "; cin >> preco;
     cout << "Quantidade: "; cin >> quantidade;
     cout << "Codigo: "; cin >> codigo;
@@ -191,9 +190,9 @@ void emitir_relatorio(int cod){
 void menu(){
     ler();
     system("cls");
-    string opc = "1";
+    string opc;
     
-    while(opc != "0"){
+    while(true){
         cout << CIANO "--- MENU ---\n" << RESET << endl;
         cout << "[ 1 ] Cadastrar Produtos" << endl;
         cout << "[ 2 ] Ver Estoque" << endl;
@@ -212,8 +211,8 @@ void menu(){
             system("cls");
         }else if(opc == "2"){
             int codigo;
-            string opcao = "1";
-            while(opcao != "0"){
+            string opcao;
+            while(true){
                 ler();
                 if(estoque.size() == 0){
                     cout << VERMELHO "Estoque Vazio" << RESET << endl;
@@ -275,6 +274,7 @@ void menu(){
                     }
                 }else if(opcao == "0"){
                     system("cls");
+                    break;
                 }else{
                     cout << VERMELHO <<"Invalido" << RESET <<endl;
                     sleep(1); system("cls");
@@ -283,7 +283,7 @@ void menu(){
         }else if(opc == "3"){
             ler();
             string opt;
-            while(opt != "0"){
+            while(true){
                 cout << VERDE "--- EMITIR RELATORIOS ---\n" << RESET << endl;
                 cout << "[ 1 ] Estoque" << endl;
                 cout << "[ 2 ] Vendas" << endl;
@@ -303,6 +303,7 @@ void menu(){
                     emitir_relatorio(3);
                 }else if(opt == "0"){
                     system("cls");
+                    break;
                 }else{
                     system("cls");
                     cout << "Invalido" << endl;
@@ -311,9 +312,12 @@ void menu(){
         }else if(opc == "0"){
             system("cls");
             cout << "Encerrando..." << endl;
-            return;
+            sleep(1); system("cls");
+            break;
         }else{
+            system("cls");
             cout << VERMELHO <<"Invalido" << RESET <<endl;
+            sleep(1); system("cls");
         }
     }
 }
