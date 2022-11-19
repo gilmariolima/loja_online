@@ -160,7 +160,7 @@ void menu(){
         cout << "[ 1 ] Cadastrar Produtos" << endl;
         cout << "[ 2 ] Ver Estoque" << endl;
         cout << "[ 3 ] Emitir Relatorios" << endl;
-        cout << "[ 0 ] Sair" << endl;
+        cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
         cout << ">> ";
         cin >> opc;
         system("cls");
@@ -194,7 +194,7 @@ void menu(){
                 cout << "\n[ 1 ] Procurar Produto" << endl;
                 cout << "[ 2 ] Deletar Produto" << endl;
                 cout << "[ 3 ] Editar" << endl;
-                cout << "[ 0 ] Sair" << endl;
+                cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                 cout << ">> "; cin >> opcao;
                 system("cls");
                 ler(); ver();
@@ -208,7 +208,7 @@ void menu(){
                         procurar(codigo);
                         
                         cout << "[ 1 ] Procurar outro" << endl;
-                        cout << "[ 0 ] Sair" << endl;
+                        cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                         cout << ">> "; cin >> opt;
 
                         if(opt == "1"){    
@@ -224,8 +224,6 @@ void menu(){
                             ver();
                         }
                     }
-                    
-
                 }else if(opcao == "2"){
                     cout << VERMELHO "\n--- DELETAR PRODUTO ---" << RESET << endl;
                     int codigo; bool achei;
@@ -259,30 +257,29 @@ void menu(){
                             pre = estoque[i].get_preco();cor = estoque[i].get_cor();
                             qntd = estoque[i].get_quantidade();cod = estoque[i].get_codigo();
                             while(true){
+                                cout << CIANO "--- EDITAR ---" << RESET << endl;
                                 procurar(cod);
                                 
-                                cout << "[ 1 ] Nome" << endl; 
-                                cout << "[ 2 ] Tamanho" << endl; 
-                                cout << "[ 3 ] Categoria" << endl; 
-                                cout << "[ 4 ] Cor" << endl; 
-                                cout << "[ 5 ] Material" << endl; 
-                                cout << "[ 6 ] Preco" << endl; 
-                                cout << "[ 7 ] Quantidade" << endl; 
-                                cout << "[ 8 ] Codigo" << endl;
+                                cout << "[ 1 ] Nome\t\t"; cout << "[ 5 ] Material" << endl; 
+                                cout << "[ 2 ] Tamanho\t\t"; cout << "[ 6 ] Preco" << endl; 
+                                cout << "[ 3 ] Categoria\t\t"; cout << "[ 7 ] Quantidade" << endl; 
+                                cout << "[ 4 ] Cor\t\t"; cout << "[ 8 ] Codigo" << endl;
+                            
                                 cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
 
                                 cout << "\nO que deseja alterar: ";
                                 fflush(stdin); cin >> op;
 
                                 system("cls");
-                                if(op == "1"){cout << "Nome: "; fflush(stdin); getline(cin, nom); estoque[i].set_nome_produto(nom);}
-                                else if(op == "2"){cout << "Tamanho: "; fflush(stdin); getline(cin, tam);estoque[i].set_tamanho(tam);}
-                                else if(op == "3"){cout << "Categoria: "; fflush(stdin); getline(cin, cat);estoque[i].set_categoria(cat);}
-                                else if(op == "4"){cout << "Cor: "; fflush(stdin); getline(cin, cor);estoque[i].set_cor(cor);}
-                                else if(op == "5"){cout << "Material: "; fflush(stdin); getline(cin, mat); estoque[i].set_material(mat);}
-                                else if(op == "6"){cout << "Preco: "; cin >> pre; estoque[i].set_preco(pre);}
-                                else if(op == "7"){cout << "Quantidade: "; cin >> qntd; estoque[i].set_quantidade(qntd);}
-                                else if(op == "8"){cout << "Codigo: "; cin >> cod; estoque[i].set_codigo(cod);}
+
+                                if(op == "1"){cout << "Digite um novo Nome: "; fflush(stdin); getline(cin, nom); estoque[i].set_nome_produto(nom);}
+                                else if(op == "2"){cout << "Digite um novo \nTamanho: "; fflush(stdin); getline(cin, tam);estoque[i].set_tamanho(tam);}
+                                else if(op == "3"){cout << "Digite uma nova \nCategoria: "; fflush(stdin); getline(cin, cat);estoque[i].set_categoria(cat);}
+                                else if(op == "4"){cout << "Digite uma nova \nCor: "; fflush(stdin); getline(cin, cor);estoque[i].set_cor(cor);}
+                                else if(op == "5"){cout << "Digite um novo \nMaterial: "; fflush(stdin); getline(cin, mat); estoque[i].set_material(mat);}
+                                else if(op == "6"){cout << "Digite um novo \nPreco R$: "; cin >> pre; estoque[i].set_preco(pre);}
+                                else if(op == "7"){cout << "Digite uma nova \nQuantidade: "; cin >> qntd; estoque[i].set_quantidade(qntd);}
+                                else if(op == "8"){cout << "Digite um novo \nCodigo: "; cin >> cod; estoque[i].set_codigo(cod);}
                                 else if(op == "0")break;
                                 if(op != "0"){
                                     system("cls");
@@ -296,6 +293,11 @@ void menu(){
                             cout << CIANO << "Salvando..." << RESET << endl;
                             sleep(1);system("cls");    
                         }
+                    }
+                    if(achei == false){
+                        system("cls");
+                        cout << VERMELHO << "Codigo Invalido" << RESET << endl;
+                        sleep(1);system("cls");
                     }
                 }else if(opcao == "0"){
                     system("cls");
@@ -313,7 +315,7 @@ void menu(){
                 cout << "[ 1 ] Estoque" << endl;
                 cout << "[ 2 ] Vendas" << endl;
                 cout << "[ 3 ] Clientes Cadastrados" << endl;
-                cout << "[ 0 ] Sair" << endl;
+                cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                 cout << ">> ";
                 cin >> opt;
                 system("cls");
