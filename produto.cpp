@@ -291,13 +291,14 @@ void menu(){
                             add_produto(nom, tam, cat, cor, mat, pre, qntd, cod);
                             system("cls");
                             cout << CIANO << "Salvando..." << RESET << endl;
-                            sleep(1);system("cls");    
+                            sleep(1);system("cls");fflush(stdin);     
                         }
                     }
                     if(achei == false){
                         system("cls");
                         cout << VERMELHO << "Codigo Invalido" << RESET << endl;
                         sleep(1);system("cls");
+                        fflush(stdin);
                     }
                 }else if(opcao == "0"){
                     system("cls");
