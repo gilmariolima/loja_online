@@ -37,6 +37,15 @@ void Produto :: set_codigo(int codigo){
     this->codigo = codigo;
 }
 
+string Produto :: get_nome_produto(){return nome;}
+string Produto :: get_tamanho(){return tamanho;}
+string Produto :: get_categoria(){return categoria;}
+string Produto :: get_cor(){return cor;}              // getters
+string Produto :: get_material(){return material;}
+float Produto :: get_preco(){return preco;}
+int Produto :: get_quantidade(){return quantidade;}
+int Produto :: get_codigo(){return codigo;}
+
 void Produto :: dados(){
     cout << "Nome:       "<<RESET << get_nome_produto() << endl;
     cout << "Tamanho:    "<<RESET << get_tamanho() << endl;
