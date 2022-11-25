@@ -22,10 +22,10 @@ class Pessoa{
         void set_email(string email);
         void set_senha(string senha);
 
-        string get_nome(){return nome;}
-        string get_cpf(){return cpf;}
-        string get_email(){return email;}
-        string get_senha(){return senha;}
+        string get_nome();
+        string get_cpf();
+        string get_email();
+        string get_senha();
         
         bool login(string email, string senha);
 };
@@ -38,7 +38,7 @@ class Funcionario : public Pessoa{
             set_cargo(cargo);
         }
         void set_cargo(string cargo);
-        string get_cargo(){return cargo;}
+        string get_cargo();
 
         
 };
@@ -55,8 +55,8 @@ class Cliente : public Pessoa{
         void set_endereco(string endereco);
         void set_cartao(string cartao);
         
-        string get_endereco(){return endereco;}
-        string get_cartao(){return cartao;}
+        string get_endereco();
+        string get_cartao();
 };
 
 
