@@ -6,6 +6,7 @@
 using namespace std;
 
 int main(){
+    system("cls");
     menu();
     return 0;
 }
