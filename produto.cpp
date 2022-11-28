@@ -101,7 +101,7 @@ void ver(){
         else if(estoque.size() > 1)cout << " itens" << RESET << endl;
         
         cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
-        for(int i=0; i<estoque.size();i++){ 
+        for(int i = 0; i < estoque.size(); i++){ 
             cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
             cout <<"R$ "<<estoque[i].get_preco()<<"    ";
             cout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
