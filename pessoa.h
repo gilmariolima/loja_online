@@ -64,5 +64,5 @@ class Cliente : public Pessoa{
         string get_cartao();
 };
 
-void menu_cli();
+
 #endif

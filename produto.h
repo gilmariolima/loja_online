@@ -44,14 +44,5 @@ class Produto{
         void dados();
 };
 
-void menu_func();
-void ver();
-void add_produto(string nome,string tamanho,string categoria,string cor,string material, float preco, int quantidade, int codigo);
-void editar(int codigo);
-void salvar(Produto aux);
-void ler();
-bool procurar(int codigo);
-bool apagar(int codigo);
-void emitir_relatorio(int cod);
 
 #endif
