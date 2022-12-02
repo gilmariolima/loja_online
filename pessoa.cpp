@@ -1,5 +1,9 @@
-#include "pessoa.h"
 #include <iostream>
+#include <fstream>
+#include <unistd.h>
+#include <vector>
+#include "produto.h"
+#include "pessoa.h"
 
 using namespace std;
 
@@ -47,4 +51,44 @@ string Cliente :: get_cartao(){return cartao;}
 //--------------------------------------------------
 
 
+void menu_cli(){
+    string opc;
+    while(true){
+        cout << CIANO "--- MENU ---\n" << RESET << endl;
+        cout << "[ 1 ] Iniciar Compra" << endl;
+        cout << "[ 2 ] Ver Carrinho" << endl;
+        cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
+        cout << ">> ";
+        cin >> opc;
+        system("cls");
+
+        if(opc == "1"){
+            string opt;
+            while(true){
+                cout << "--- Categorias ---" << endl;
+                cout << "[ 1 ] Roupas" << endl;
+                cout << "[ 2 ] Moda Intima" << endl;
+                cout << "[ 3 ] Calcado" << endl;
+                cout << "[ 0 ] Sair" << endl;
+                cin >> opt;
+                if(opt == "1"){
+                    Produto novo;
+                    ifstream arq;
+                    arq.open("estoque.dat", ios::binary);
+                    while(arq.read((char*)&novo, sizeof(Produto))){
+                        cout << novo.get_nome_produto() << endl;
+                    }
+                    arq.close();
+                }else if(opt == "0"){
+                    break;
+                }
+            }
+            
+        }else if(opc == "2"){
+            cout << "Ver carrinho" << endl;
+        }else if(opc == "0"){
+            break;
+        }
+    }
+}
 

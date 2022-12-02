@@ -2,6 +2,11 @@
 #define PESSOA_H
 #include <string>
 
+#define VERMELHO "\x1b[31m"
+#define VERDE "\x1b[32m"
+#define CIANO "\x1b[36m"
+#define RESET "\x1b[0m"
+
 using namespace std;
 
 class Pessoa{
@@ -59,5 +64,5 @@ class Cliente : public Pessoa{
         string get_cartao();
 };
 
-
+void menu_cli();
 #endif

@@ -5,11 +5,6 @@
 #include "produto.h"
 #include "pessoa.h"
 
-#define VERMELHO "\x1b[31m"
-#define VERDE "\x1b[32m"
-#define CIANO "\x1b[36m"
-#define RESET "\x1b[0m"
-
 vector<Produto> estoque;
 
 void Produto :: set_nome_produto(string nome){
@@ -94,7 +89,7 @@ void ler(){
     arq.close();
 }
 
-void ver(){
+void ver(){ 
     if(estoque.size() > 0){
         cout << VERMELHO "--- ESTOQUE ---  "<<estoque.size();
         if(estoque.size() == 1)cout << " item"<< RESET << endl;
@@ -156,7 +151,7 @@ void emitir_relatorio(int cod){
     }
 }
 
-void menu(){
+void menu_func(){
     ler();
     system("cls");
     string opc;
@@ -168,6 +163,7 @@ void menu(){
         cout << "[ 1 ] Cadastrar Produtos" << endl;
         cout << "[ 2 ] Ver Estoque" << endl;
         cout << "[ 3 ] Emitir Relatorios" << endl;
+        cout << "[ 4 ] Funcionarios" << endl;
         cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
         cout << ">> ";
         cin >> opc;
@@ -280,7 +276,7 @@ void menu(){
 
                                 system("cls");
 
-                                if(op == "1"){cout << "Digite um novo Nome: "; fflush(stdin); getline(cin, nome); estoque[i].set_nome_produto(nome);}
+                                if(op == "1"){cout << "Digite um novo \nNome: "; fflush(stdin); getline(cin, nome); estoque[i].set_nome_produto(nome);}
                                 else if(op == "2"){cout << "Digite um novo \nTamanho: "; fflush(stdin); getline(cin, tamanho);estoque[i].set_tamanho(tamanho);}
                                 else if(op == "3"){cout << "Digite uma nova \nCategoria: "; fflush(stdin); getline(cin, categoria);estoque[i].set_categoria(categoria);}
                                 else if(op == "4"){cout << "Digite uma nova \nCor: "; fflush(stdin); getline(cin, cor);estoque[i].set_cor(cor);}
@@ -332,7 +328,7 @@ void menu(){
                 if(opt == "1"){
                     emitir_relatorio(1);
                     cout << VERDE "Emitindo relatorio..." << RESET << endl;
-                    sleep(1);system("cls");
+                    sleep(1); system("cls");
                 }else if(opt == "2"){
                     emitir_relatorio(2);
                 }else if(opt == "3"){
@@ -345,6 +341,8 @@ void menu(){
                     cout << "Invalido" << endl;
                 }
             }
+        }else if(opc == "4"){
+            //sla
         }else if(opc == "0"){
             system("cls");
             cout << "Encerrando..." << endl;
