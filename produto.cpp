@@ -42,7 +42,7 @@ int Produto :: get_quantidade(){return quantidade;}
 int Produto :: get_codigo(){return codigo;}
 
 void Produto :: dados(){
-    cout << "Nome:       "<<RESET << get_nome_produto() << endl;
+    cout << "Produto:    "<<RESET << get_nome_produto() << endl;
     cout << "Tamanho:    "<<RESET << get_tamanho() << endl;
     cout << "Categoria:  "<<RESET << get_categoria() << endl;
     cout << "Cor:        "<<RESET << get_cor() << endl;

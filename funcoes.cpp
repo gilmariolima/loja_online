@@ -2,6 +2,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
+#include "produto.h"
 #include "funcoes.h"
 
 vector<Produto> estoque;
@@ -23,7 +24,15 @@ bool procurar(int codigo){
 
     for(int i=0; i<estoque.size(); i++){
         if(estoque[i].get_codigo() == codigo){
-            estoque[i].dados();
+            cout << "[ 1 ] Produto:    "<<RESET << estoque[i].get_nome_produto() << endl;
+            cout << "[ 2 ] Tamanho:    "<<RESET << estoque[i].get_tamanho() << endl;
+            cout << "[ 3 ] Categoria:  "<<RESET << estoque[i].get_categoria() << endl;
+            cout << "[ 4 ] Cor:        "<<RESET << estoque[i].get_cor() << endl;
+            cout << "[ 5 ] Material:   "<<RESET << estoque[i].get_material() << endl;
+            cout << "[ 6 ] Preco:      "<<RESET << estoque[i].get_preco() << endl;
+            cout << "[ 7 ] Quantidade: "<<RESET << estoque[i].get_quantidade() << endl;
+            cout << "[ 8 ] Codigo:     "<<RESET << estoque[i].get_codigo() << endl;
+            cout << endl;
             achei = true;
         }
     }
@@ -63,12 +72,24 @@ void ver(){
 }
 
 void filtrar(string cat){
-    int cont = 1;
+    int cont = 1; string opc;
     for(int i=0; i < estoque.size(); i++){
         if(estoque[i].get_categoria() == cat){
             cout << cont << " - ";
             cout << "Produto: " << estoque[i].get_nome_produto() << endl;
             cont ++;
+        }
+    }
+    while(true){
+        cout << "[ 0 ] Sair\n>> ";
+        cin >> opc;
+
+        if(opc == "0"){
+            system("cls");
+            break;
+        }else{
+            system("cls");
+            cout << "invalido" << endl;
         }
     }
 }
@@ -229,11 +250,6 @@ void menu(int tipo){
                                     cout << CIANO "--- EDITAR ---" << RESET << endl;
                                     procurar(cod);
                                     
-                                    cout << "[ 1 ] Nome\t\t"; cout << "[ 5 ] Material" << endl; 
-                                    cout << "[ 2 ] Tamanho\t\t"; cout << "[ 6 ] Preco" << endl; 
-                                    cout << "[ 3 ] Categoria\t\t"; cout << "[ 7 ] Quantidade" << endl; 
-                                    cout << "[ 4 ] Cor\t\t"; cout << "[ 8 ] Codigo" << endl;
-                                
                                     cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
 
                                     cout << "\nO que deseja alterar: ";
