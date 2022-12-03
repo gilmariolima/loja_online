@@ -6,6 +6,8 @@
 #include "funcoes.h"
 
 vector<Produto> estoque;
+vector<Funcionario> funcionarios;
+vector<Pessoa> clientes;
 
 void salvar(Produto aux){
     ofstream arq;
@@ -24,14 +26,14 @@ bool procurar(int codigo){
 
     for(int i=0; i<estoque.size(); i++){
         if(estoque[i].get_codigo() == codigo){
-            cout << "[ 1 ] Produto:    "<<RESET << estoque[i].get_nome_produto() << endl;
-            cout << "[ 2 ] Tamanho:    "<<RESET << estoque[i].get_tamanho() << endl;
-            cout << "[ 3 ] Categoria:  "<<RESET << estoque[i].get_categoria() << endl;
-            cout << "[ 4 ] Cor:        "<<RESET << estoque[i].get_cor() << endl;
-            cout << "[ 5 ] Material:   "<<RESET << estoque[i].get_material() << endl;
-            cout << "[ 6 ] Preco:      "<<RESET << estoque[i].get_preco() << endl;
-            cout << "[ 7 ] Quantidade: "<<RESET << estoque[i].get_quantidade() << endl;
-            cout << "[ 8 ] Codigo:     "<<RESET << estoque[i].get_codigo() << endl;
+            cout << "Produto:    "<<RESET << estoque[i].get_nome_produto() << endl;
+            cout << "Tamanho:    "<<RESET << estoque[i].get_tamanho() << endl;
+            cout << "Categoria:  "<<RESET << estoque[i].get_categoria() << endl;
+            cout << "Cor:        "<<RESET << estoque[i].get_cor() << endl;
+            cout << "Material:   "<<RESET << estoque[i].get_material() << endl;
+            cout << "Preco:      "<<RESET << estoque[i].get_preco() << endl;
+            cout << "Quantidade: "<<RESET << estoque[i].get_quantidade() << endl;
+            cout << "Codigo:     "<<RESET << estoque[i].get_codigo() << endl;
             cout << endl;
             achei = true;
         }
@@ -72,24 +74,34 @@ void ver(){
 }
 
 void filtrar(string cat){
-    int cont = 1; string opc;
+    int cod;
+    cout << "Cod\tProd\t    Tam\t   Cor" << endl;
     for(int i=0; i < estoque.size(); i++){
         if(estoque[i].get_categoria() == cat){
-            cout << cont << " - ";
-            cout << "Produto: " << estoque[i].get_nome_produto() << endl;
-            cont ++;
+            cout << estoque[i].get_codigo() <<"\t"<< estoque[i].get_nome_produto();
+            cout << "\t    " << estoque[i].get_tamanho()<<"\t   "<<estoque[i].get_cor() << endl;
+
         }
     }
     while(true){
-        cout << "[ 0 ] Sair\n>> ";
-        cin >> opc;
-
-        if(opc == "0"){
+        cout << CIANO<<"\n[ 0 ] Sair\n"<< RESET;
+        cout << "\nDigite o Codigo do Produto\n>> ";
+        cin >> cod;
+        
+        if(cod == 0){
             system("cls");
             break;
         }else{
             system("cls");
-            cout << "invalido" << endl;
+            for(int i=0; i < estoque.size(); i++){
+                if(cod == estoque[i].get_codigo()){
+                    cout <<"Codigo: " << estoque[i].get_codigo() << endl;
+                    cout <<"Produto: " << estoque[i].get_nome_produto() << endl;
+                    cout <<"Tamanho: " << estoque[i].get_tamanho() << endl;
+                    cout <<"Cor: " << estoque[i].get_cor() << endl;
+                    cout <<"Material: " << estoque[i].get_material() << endl;
+                }
+            }
         }
     }
 }
@@ -135,6 +147,61 @@ void emitir_relatorio(int cod){
         }
     }
 }
+void salvar_pessoa(int tipo){
+    string nome, cpf, email, senha, endereco, cartao;
+    cout << "Nome Completo: "; fflush(stdin); getline(cin, nome); 
+    cout << "Cpf: "; fflush(stdin); getline(cin, cpf); 
+    cout << "Email: "; fflush(stdin); getline(cin, email); 
+    cout << "Senha: "; fflush(stdin); getline(cin, senha);
+    cout << "Endereco: "; fflush(stdin); getline(cin, endereco); 
+    cout << "Cartao: "; fflush(stdin); getline(cin, cartao);  
+
+    ofstream arq;
+
+    if(tipo == 1){
+        string cargo;
+        cout << "Cargo: "; fflush(stdin); getline(cin, cargo); 
+
+        Funcionario aux(nome, cpf, email, senha, endereco, cartao, cargo);
+
+        arq.open("funcionarios.dat", ios::binary | ios::app);
+        arq.write((char *)&aux, sizeof(Funcionario)); 
+
+    }else if(tipo == 2){
+        Pessoa aux(nome, cpf, email, senha, endereco, cartao);
+
+        ofstream arq;
+        arq.open("clientes.dat", ios::binary | ios::app);
+        arq.write((char *)&aux, sizeof(Pessoa)); 
+
+    }
+    arq.close();
+
+    system("cls"); 
+    cout << VERDE<<"Cadastrando..."<< RESET;
+    sleep(1); system("cls");
+}
+
+void ler_pessoa(int tipo){
+    ifstream arq;
+
+    if(tipo == 1){
+        Funcionario novo;
+        arq.open("estoque.dat", ios::binary);
+        while(arq.read((char*)&novo, sizeof(Funcionario))){
+            funcionarios.push_back(novo); 
+        }
+    }else if(tipo == 2){
+        Pessoa novo;
+        arq.open("estoque.dat", ios::binary);
+        while(arq.read((char*)&novo, sizeof(Pessoa))){
+            clientes.push_back(novo); 
+        }
+    }
+    arq.close();
+}
+
+
 
 void menu(int tipo){
     if(tipo == 1){
@@ -241,14 +308,24 @@ void menu(int tipo){
 
                         for(int i=0; i<estoque.size(); i++){
                             if(estoque[i].get_codigo() == codigo){
+
                                 achei = true;
                                 nome = estoque[i].get_nome_produto();tamanho = estoque[i].get_tamanho();
                                 categoria = estoque[i].get_categoria();material = estoque[i].get_material();
                                 preco = estoque[i].get_preco();cor = estoque[i].get_cor();
                                 qntd = estoque[i].get_quantidade();cod = estoque[i].get_codigo();
+
                                 while(true){
                                     cout << CIANO "--- EDITAR ---" << RESET << endl;
-                                    procurar(cod);
+                                    cout << "[ 1 ] Produto:    "<<RESET << estoque[i].get_nome_produto() << endl;
+                                    cout << "[ 2 ] Tamanho:    "<<RESET << estoque[i].get_tamanho() << endl;
+                                    cout << "[ 3 ] Categoria:  "<<RESET << estoque[i].get_categoria() << endl;
+                                    cout << "[ 4 ] Cor:        "<<RESET << estoque[i].get_cor() << endl;
+                                    cout << "[ 5 ] Material:   "<<RESET << estoque[i].get_material() << endl;
+                                    cout << "[ 6 ] Preco:      "<<RESET << estoque[i].get_preco() << endl;
+                                    cout << "[ 7 ] Quantidade: "<<RESET << estoque[i].get_quantidade() << endl;
+                                    cout << "[ 8 ] Codigo:     "<<RESET << estoque[i].get_codigo() << endl;
+                                    cout << endl;
                                     
                                     cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
 
@@ -323,7 +400,23 @@ void menu(int tipo){
                     }
                 }
             }else if(opc == "4"){
-                //sla
+                string x;
+                cout << CIANO "--- FUNCIONARIOS ---\n" << RESET << endl;
+                while(true){
+                    cout << "[ 1 ] Cadastrar Funcionario" << endl;
+                    cout << "[ 2 ] Deletar Dados" << endl;
+                    cout << "[ 3 ] Editar Dados" << endl;
+                    cout << "[ 4 ] Listar Funcionarios" << endl;
+                    cout << CIANO<<"[ 0 ] Sair"<<RESET <<"\n>> "; cin >> x;
+
+                    system("cls");
+                    if(x == "1") salvar_pessoa(1);
+                    else if(x == "3"){
+                        ler_pessoa(1); //ver_pessoa(1);
+                    }
+                    else if(x == "0") break;
+                    else cout << "Invalido" << endl;
+                }
             }else if(opc == "0"){
                 system("cls");
                 cout << "Encerrando..." << endl;
