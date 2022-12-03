@@ -18,5 +18,6 @@ bool procurar(int codigo);
 bool apagar(int codigo);
 void emitir_relatorio(int cod);
 void filtrar(string cat);
+void salvar_pessoa(int tipo);
 
 #endif
