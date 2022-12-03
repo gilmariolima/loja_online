@@ -9,17 +9,53 @@ vector<Produto> estoque;
 vector<Funcionario> funcionarios;
 vector<Pessoa> clientes;
 
-void salvar(Produto aux){
-    ofstream arq;
-    arq.open("estoque.dat", ios::binary | ios::app);
-    arq.write((char *)&aux, sizeof(Produto)); 
-    arq.close();
+void salvar(Produto aux, Pessoa novo, Funcionario nova, int tipo){
+    
+    if(tipo == 1){
+        ofstream arq;
+        arq.open("estoque.dat", ios::binary | ios::app);
+        arq.write((char *)&aux, sizeof(Produto)); 
+        arq.close();
+    }else if(tipo == 2){
+        ofstream arq;
+        arq.open("clientes.dat", ios::binary | ios::app);
+        arq.write((char *)&novo, sizeof(Pessoa)); 
+        arq.close();
+    }else if(tipo == 3){
+        ofstream arq;
+        arq.open("funcionarios.dat", ios::binary | ios::app);
+        arq.write((char *)&nova, sizeof(Funcionario)); 
+        arq.close();
+    }
+    
 }
 
 void add_produto(string nome,string tamanho,string categoria,string cor,string material, float preco, int quantidade, int codigo){
-    Produto novo(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
-    salvar(novo);
+    Produto aux(nome, tamanho, categoria, cor, material, preco, quantidade, codigo);
+    Pessoa novo; Funcionario nova;
+    salvar(aux, novo, nova, 1);
 }
+
+void add_pessoa(int tipo){
+    string nome, cpf, email, senha, endereco, cartao;
+    string cargo = "";
+    cout << "Nome Completo: "; fflush(stdin); getline(cin, nome); 
+    cout << "Cpf: "; fflush(stdin); getline(cin, cpf); 
+    cout << "Email: "; fflush(stdin); getline(cin, email); 
+    cout << "Senha: "; fflush(stdin); getline(cin, senha);
+    cout << "Endereco: "; fflush(stdin); getline(cin, endereco); 
+    cout << "Cartao: "; fflush(stdin); getline(cin, cartao); 
+
+    if(tipo == 2){
+        cout << "Cargo: "; fflush(stdin); getline(cin, cargo); 
+    }
+    Produto aux;
+    Pessoa novo(nome, cpf, email, senha, endereco, cartao);
+    Funcionario nova(nome, cpf, email, senha, endereco, cartao, cargo);
+     
+    salvar(aux, novo, nova, tipo);
+}
+
 
 bool procurar(int codigo){
     string opc = "1"; bool achei = false;
@@ -42,34 +78,63 @@ bool procurar(int codigo){
     return achei;
 }
 
-void ler(){
-    estoque.clear();
-    Produto novo;
-    ifstream arq;
-    arq.open("estoque.dat", ios::binary);
-    while(arq.read((char*)&novo, sizeof(Produto))){
-        estoque.push_back(novo);
+void ler(int tipo){
+    Produto aux; Pessoa novo; Funcionario nova;
+
+    if(tipo == 1){
+        estoque.clear();
+        ifstream arq;
+        arq.open("estoque.dat", ios::binary);
+        while(arq.read((char*)&aux, sizeof(Produto))){
+            estoque.push_back(aux);
+        }
+        arq.close();
+    }else if(tipo == 2){
+        clientes.clear();
+        ifstream arq;
+        arq.open("clientes.dat", ios::binary);
+        while(arq.read((char*)&novo, sizeof(Pessoa))){
+            clientes.push_back(novo);
+        }
+        arq.close();
+    }else if(tipo == 3){
+        funcionarios.clear();
+        ifstream arq;
+        arq.open("funcionarios.dat", ios::binary);
+        while(arq.read((char*)&nova, sizeof(Funcionario))){
+            funcionarios.push_back(nova);
+        }
+        arq.close();
     }
-    arq.close();
 }
 
-void ver(){ 
-    if(estoque.size() > 0){
-        cout << VERMELHO "--- ESTOQUE ---  "<<estoque.size();
-        if(estoque.size() == 1)cout << " item"<< RESET << endl;
-        else if(estoque.size() > 1)cout << " itens" << RESET << endl;
+void ver(int tipo){
+    if(tipo == 1){
+        if(estoque.size() > 0){
+            cout << VERMELHO "--- ESTOQUE ---  "<<estoque.size();
+            if(estoque.size() == 1)cout << " item"<< RESET << endl;
+            else if(estoque.size() > 1)cout << " itens" << RESET << endl;
         
-        cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
-        for(int i = 0; i < estoque.size(); i++){ 
-            cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
-            cout <<"R$ "<<estoque[i].get_preco()<<"    ";
-            cout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
-            cout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
-            cout <<"Cod: "<< estoque[i].get_codigo()<<endl;
             cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            for(int i = 0; i < estoque.size(); i++){ 
+                cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
+                cout <<"R$ "<<estoque[i].get_preco()<<"    ";
+                cout <<"Qntd: "<<estoque[i].get_quantidade()<<"    ";
+                cout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
+                cout <<"Cod: "<< estoque[i].get_codigo()<<endl;
+                cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            }
+        }else{
+            cout <<VERMELHO << "Estoque Vazio" <<RESET << endl;
         }
-    }else{
-        cout << VERMELHO << "Estoque Vazio" << RESET << endl;
+    }else if(tipo == 2){
+        for(int i=0; i < clientes.size(); i++){
+            cout << clientes[i].get_nome() << endl;
+        }
+    }else if(tipo == 3){
+        for(int i=0; i < funcionarios.size(); i++){
+            cout << funcionarios[i].get_nome() << endl;
+        }
     }
 }
 
@@ -147,65 +212,12 @@ void emitir_relatorio(int cod){
         }
     }
 }
-void salvar_pessoa(int tipo){
-    string nome, cpf, email, senha, endereco, cartao;
-    cout << "Nome Completo: "; fflush(stdin); getline(cin, nome); 
-    cout << "Cpf: "; fflush(stdin); getline(cin, cpf); 
-    cout << "Email: "; fflush(stdin); getline(cin, email); 
-    cout << "Senha: "; fflush(stdin); getline(cin, senha);
-    cout << "Endereco: "; fflush(stdin); getline(cin, endereco); 
-    cout << "Cartao: "; fflush(stdin); getline(cin, cartao);  
-
-    ofstream arq;
-
-    if(tipo == 1){
-        string cargo;
-        cout << "Cargo: "; fflush(stdin); getline(cin, cargo); 
-
-        Funcionario aux(nome, cpf, email, senha, endereco, cartao, cargo);
-
-        arq.open("funcionarios.dat", ios::binary | ios::app);
-        arq.write((char *)&aux, sizeof(Funcionario)); 
-
-    }else if(tipo == 2){
-        Pessoa aux(nome, cpf, email, senha, endereco, cartao);
-
-        ofstream arq;
-        arq.open("clientes.dat", ios::binary | ios::app);
-        arq.write((char *)&aux, sizeof(Pessoa)); 
-
-    }
-    arq.close();
-
-    system("cls"); 
-    cout << VERDE<<"Cadastrando..."<< RESET;
-    sleep(1); system("cls");
-}
-
-void ler_pessoa(int tipo){
-    ifstream arq;
-
-    if(tipo == 1){
-        Funcionario novo;
-        arq.open("estoque.dat", ios::binary);
-        while(arq.read((char*)&novo, sizeof(Funcionario))){
-            funcionarios.push_back(novo); 
-        }
-    }else if(tipo == 2){
-        Pessoa novo;
-        arq.open("estoque.dat", ios::binary);
-        while(arq.read((char*)&novo, sizeof(Pessoa))){
-            clientes.push_back(novo); 
-        }
-    }
-    arq.close();
-}
 
 
 
 void menu(int tipo){
     if(tipo == 1){
-        ler();
+        ler(1);
         system("cls");
         string opc;
         string nome, tamanho, categoria, cor, material;
@@ -241,20 +253,20 @@ void menu(int tipo){
                 int codigo;
                 string opcao;
                 while(true){
-                    ler();
+                    ler(1);
                     if(estoque.size() == 0){
                         cout << VERMELHO "Estoque Vazio" << RESET << endl;
                         sleep(1); system("cls");
                         break;
                     }
-                    ver();
+                    ver(1);
                     cout << "\n[ 1 ] Procurar Produto" << endl;
                     cout << "[ 2 ] Deletar Produto" << endl;
                     cout << "[ 3 ] Editar" << endl;
                     cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                     cout << ">> "; cin >> opcao;
                     system("cls");
-                    ler(); ver();
+                    ler(1); ver(1);
                     
                     if(opcao == "1"){
                         string opt;
@@ -270,7 +282,7 @@ void menu(int tipo){
 
                             if(opt == "1"){    
                                 system("cls");
-                                ver();
+                                ver(1);
                             }else if(opt == "0"){
                                 system("cls");
                                 break;
@@ -278,7 +290,7 @@ void menu(int tipo){
                                 system("cls");
                                 cout << VERMELHO << "Invalido"<< RESET;
                                 sleep(1); system("cls");
-                                ver();
+                                ver(1);
                             }
                         }
                     }else if(opcao == "2"){
@@ -371,7 +383,7 @@ void menu(int tipo){
                     }
                 }
             }else if(opc == "3"){
-                ler();
+                ler(1);
                 string opt;
                 while(true){
                     cout << VERDE "--- EMITIR RELATORIOS ---\n" << RESET << endl;
@@ -401,8 +413,9 @@ void menu(int tipo){
                 }
             }else if(opc == "4"){
                 string x;
-                cout << CIANO "--- FUNCIONARIOS ---\n" << RESET << endl;
+                ler(3);
                 while(true){
+                    cout << CIANO "--- FUNCIONARIOS ---\n" << RESET << endl;
                     cout << "[ 1 ] Cadastrar Funcionario" << endl;
                     cout << "[ 2 ] Deletar Dados" << endl;
                     cout << "[ 3 ] Editar Dados" << endl;
@@ -410,9 +423,14 @@ void menu(int tipo){
                     cout << CIANO<<"[ 0 ] Sair"<<RESET <<"\n>> "; cin >> x;
 
                     system("cls");
-                    if(x == "1") salvar_pessoa(1);
-                    else if(x == "3"){
-                        ler_pessoa(1); //ver_pessoa(1);
+                    if(x == "1"){
+                        add_pessoa(3);
+                        system("cls");
+                        cout << VERDE << "Cadastrando..." << RESET << endl;
+                        sleep(1); system("cls");
+
+                    }else if(x == "4"){
+                        ler(3); ver(3);
                     }
                     else if(x == "0") break;
                     else cout << "Invalido" << endl;
@@ -442,7 +460,7 @@ void menu(int tipo){
             if(opcao == "1"){
                 string x;
                 while(true){
-                    ler();
+                    ler(1);
                     cout << CIANO "--- CATEGORIAS ---\n" << RESET << endl;
                     cout << "[ 1 ] Roupas" << endl;
                     cout << "[ 2 ] Moda Intima" << endl;

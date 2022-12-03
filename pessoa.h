@@ -53,7 +53,6 @@ class Funcionario : public Pessoa{
             set_cargo(cargo);
         }
         Funcionario():Pessoa(){}
-
         void set_cargo(string cargo);
         string get_cargo();        
 };
