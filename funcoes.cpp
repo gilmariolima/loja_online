@@ -486,7 +486,8 @@ void menu(int tipo){
                             sleep(1);system("cls");
                         }
                     }else if(x == "4"){
-                            
+                        ler(3);ver(3);
+                        
                         bool achei = false;
                         string op;
                     
@@ -515,9 +516,7 @@ void menu(int tipo){
                                     cout << "[ 7 ] Cargo:      " << funcionarios[i].get_cargo() << endl;
                                     
                                     cout << endl;
-                                    
                                     cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
-
                                     cout << "\nO que deseja alterar: ";
                                     fflush(stdin); cin >> op;
 
@@ -597,7 +596,6 @@ void menu(int tipo){
                         cout << "Invalido" << endl;
                     }
                 }
-                
             }else if(opcao == "0"){
                 break;
             }
