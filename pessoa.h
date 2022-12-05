@@ -12,13 +12,13 @@ using namespace std;
 class Pessoa{
     private:
         string nome;
-        string cpf;
+        long int cpf;
         string email;
         string senha;
         string endereco;
         string cartao;
     public:
-        Pessoa(string nome, string cpf, string email, string senha, string endereco, string cartao){
+        Pessoa(string nome, long int cpf, string email, string senha, string endereco, string cartao){
             set_nome(nome);
             set_cpf(cpf);
             set_email(email);
@@ -29,14 +29,14 @@ class Pessoa{
         Pessoa(){}
 
         void set_nome(string nome);
-        void set_cpf(string cpf);
+        void set_cpf(long int cpf);
         void set_email(string email);
         void set_senha(string senha);
         void set_endereco(string endereco);
         void set_cartao(string cartao);
 
         string get_nome();
-        string get_cpf();
+        long int get_cpf();
         string get_email();
         string get_senha();
         string get_endereco();
@@ -49,7 +49,7 @@ class Funcionario : public Pessoa{
     private:
         string cargo;
     public:
-        Funcionario(string nome, string cpf, string email, string senha,string endereco, string cartao ,string cargo):Pessoa(nome, cpf, email, senha, endereco, cartao){
+        Funcionario(string nome, long int cpf, string email, string senha,string endereco, string cartao ,string cargo):Pessoa(nome, cpf, email, senha, endereco, cartao){
             set_cargo(cargo);
         }
         Funcionario():Pessoa(){}

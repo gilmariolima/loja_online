@@ -10,7 +10,7 @@ using namespace std;
 void Pessoa :: set_nome(string nome){
     this->nome = nome;
 }
-void Pessoa :: set_cpf(string cpf){
+void Pessoa :: set_cpf(long int cpf){
     this->cpf = cpf;
 }
 void Pessoa :: set_email(string email){
@@ -27,7 +27,7 @@ void Pessoa :: set_cartao(string cartao){
 }
 
 string Pessoa :: get_nome(){return nome;}
-string Pessoa :: get_cpf(){return cpf;}
+long int Pessoa :: get_cpf(){return cpf;}
 string Pessoa :: get_email(){return email;}
 string Pessoa :: get_senha(){return senha;}
 string Pessoa :: get_endereco(){return endereco;}
