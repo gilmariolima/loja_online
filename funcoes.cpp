@@ -149,8 +149,16 @@ void ver(int tipo){
             cout <<VERMELHO << "Estoque Vazio" <<RESET << endl;
         }
     }else if(tipo == 2){
-        for(int i=0; i < clientes.size(); i++){
-            cout << clientes[i].get_nome() << endl;
+        if(clientes.size() > 0){
+            cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            for(int i=0; i < clientes.size(); i++){
+                cout << "Nome: "<< clientes[i].get_nome() << endl;
+                cout << "Cpf: "<< clientes[i].get_cpf() << endl;
+                cout << "Email: "<< clientes[i].get_email() << endl;
+                cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            }
+        }else {
+            cout << "Vazio" << endl;
         }
     }else if(tipo == 3){
         if(funcionarios.size() > 0){
@@ -160,7 +168,6 @@ void ver(int tipo){
                 cout << "Cpf: "<< funcionarios[i].get_cpf() << endl;
                 cout << "Email: "<< funcionarios[i].get_email() << endl;
                 cout << "Cargo: "<< funcionarios[i].get_cargo() << endl;
-                cout << "Id: "<< funcionarios[i].get_id() << endl;
                 cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
             }
         }else {
@@ -479,7 +486,7 @@ void menu(int menu){
                             ler(3); ver(3);
                             cout << VERMELHO "\n--- DELETAR DADOS ---" << RESET << endl;
                             
-                            cout << "Cpf: ";
+                            cout << "\nCpf: ";
                             fflush(stdin); getline(cin, cpf);
 
                             for(int i=0; i < funcionarios.size(); i++){
@@ -517,7 +524,6 @@ void menu(int menu){
 
                             for(int i=0; i<funcionarios.size(); i++){
                                 if(funcionarios[i].get_cpf() == cpf){
-
                                     achei = true;
                                     nome_fun = funcionarios[i].get_nome();cpf = funcionarios[i].get_cpf();
                                     senha = funcionarios[i].get_senha();endereco = funcionarios[i].get_endereco();
@@ -555,12 +561,15 @@ void menu(int menu){
                                             sleep(1);system("cls");
                                         }else cout << "Invalido" << endl;
                                     }
-                                    
                                     apagar_func(id);
                                     add_func(nome_fun, cpf, email, senha, endereco, cartao, id, cargo);
                                     system("cls");
                                     cout << CIANO << "Salvando..." << RESET << endl;
-                                    sleep(1);system("cls");fflush(stdin);     
+                                    sleep(1);system("cls");    
+                                }else{
+                                    system("cls");
+                                    cout << VERMELHO <<"Invalido" << RESET <<endl;
+                                    sleep(1); system("cls");
                                 }
                             }
                         }else{
