@@ -45,8 +45,7 @@ class Pessoa{
         string get_endereco();
         string get_cartao();
         int get_id();
-        
-        bool login(string email, string senha);
+
 };
 
 class Funcionario : public Pessoa{
@@ -57,8 +56,9 @@ class Funcionario : public Pessoa{
             set_cargo(cargo);
         }
         Funcionario():Pessoa(){}
+
         void set_cargo(string cargo);
-        string get_cargo();        
+        string get_cargo();  
 };
 
 #endif

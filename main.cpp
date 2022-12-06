@@ -1,12 +1,12 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 #include "funcoes.h"
 
 using namespace std;
 
 int main(){
-    system("cls");
-    menu(1); // menu func
+    menu();
     return 0;
 }

@@ -5,8 +5,6 @@
 #include "produto.h"
 #include "pessoa.h"
 
-
-
 void Produto :: set_nome_produto(string nome){
     this->nome = nome;
 }

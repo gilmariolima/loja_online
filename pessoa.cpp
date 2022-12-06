@@ -2,6 +2,7 @@
 #include <fstream>
 #include <unistd.h>
 #include <vector>
+#include <string.h>
 #include "produto.h"
 #include "pessoa.h"
 
@@ -37,12 +38,6 @@ string Pessoa :: get_endereco(){return endereco;}
 string Pessoa :: get_cartao(){return cartao;}
 int Pessoa :: get_id(){return id;}
 
-bool Pessoa :: login(string email, string senha){
-    if(get_email() == email && get_senha() == senha){
-        return true;
-    }
-    return false;
-}
 //------------------------------------------
 
 void Funcionario :: set_cargo(string cargo){
