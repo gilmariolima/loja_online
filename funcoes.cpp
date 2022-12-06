@@ -4,6 +4,7 @@
 #include <vector>
 #include "produto.h"
 #include "funcoes.h"
+#include <time.h>
 
 vector<Produto> estoque;
 vector<Funcionario> funcionarios;
@@ -55,14 +56,14 @@ void add_produto(string nome,string tamanho,string categoria,string cor,string m
     salvar(aux, nova, novo, 1);
 }
 
-void add_func(string nome, long int cpf, string email, string senha,string endereco, string cartao ,string cargo){
-    Funcionario novo(nome,cpf,email,senha,endereco,cartao,cargo);
+void add_func(string nome, string cpf, string email, string senha,string endereco, string cartao ,int id, string cargo){
+    Funcionario novo(nome,cpf,email,senha,endereco,cartao,id,cargo);
     Produto aux; Pessoa nova;
     salvar(aux, nova, novo, 3);
 }
 
 bool apagar(int codigo){
-    Produto aux;
+    Produto aux; 
     ifstream arq;
     ofstream fout;
     bool achei = false;
@@ -77,15 +78,13 @@ bool apagar(int codigo){
             achei = true;
         }
     }
-    
     fout.close();
     arq.close();
     remove("estoque.dat");
     rename("novo.dat","estoque.dat");
-    return achei;  
 }
 
-bool apagar_func(long int cpf){
+bool apagar_func(int num){
     Funcionario aux;
     ifstream arq;
     ofstream fout;
@@ -95,7 +94,7 @@ bool apagar_func(long int cpf){
     fout.open("novo.dat",ios_base::binary|ios_base::app);
 
     while(arq.read((char*)&aux, sizeof(Funcionario))){
-        if(aux.get_cpf() != cpf){
+        if(aux.get_id() != num){
             fout.write((char*)&aux, sizeof(Funcionario));  
         }else{
             achei = true;
@@ -161,6 +160,7 @@ void ver(int tipo){
                 cout << "Cpf: "<< funcionarios[i].get_cpf() << endl;
                 cout << "Email: "<< funcionarios[i].get_email() << endl;
                 cout << "Cargo: "<< funcionarios[i].get_cargo() << endl;
+                cout << "Id: "<< funcionarios[i].get_id() << endl;
                 cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
             }
         }else {
@@ -219,6 +219,14 @@ void emitir_relatorio(int cod){
         }
     }
 }
+
+int id_ramdom(){
+    srand(time(NULL));
+    int id = rand() % 9999;
+    id += 1;
+    return id;
+}
+
 
 void menu(int menu){
     if(menu == 1){
@@ -418,8 +426,8 @@ void menu(int menu){
                     }
                 }
             }else if(opc == "4"){
-                string nome_fun, email, senha, endereco, cartao, cargo;
-                long int cpf; bool ac;
+                string nome_fun, email, senha, endereco, cartao, cargo, cpf; 
+                bool ac; int id;
                 
                 while(true){
                     cout << CIANO "--- FUNCIONARIOS ---\n" << RESET << endl;
@@ -435,14 +443,15 @@ void menu(int menu){
                     if(x == "1"){
                         cout << VERDE "--- CADASTRAR FUNCIONARIO ---\n" << RESET << endl;
                         cout << "Nome: ";     fflush(stdin); getline(cin, nome_fun);
-                        cout << "Cpf: ";      cin >> cpf;
+                        cout << "Cpf: ";      fflush(stdin); getline(cin, cpf);
                         cout << "Email: ";    fflush(stdin); getline(cin, email);
                         cout << "Senha: ";    fflush(stdin); getline(cin, senha);
                         cout << "Endereco: "; fflush(stdin); getline(cin, endereco);
                         cout << "Cartao: ";   fflush(stdin); getline(cin, cartao);
                         cout << "Cargo: ";    fflush(stdin); getline(cin, cargo);
+                        id = id_ramdom();
     
-                        add_func(nome_fun, cpf, email, senha, endereco, cartao, cargo);
+                        add_func(nome_fun, cpf, email, senha, endereco, cartao, id, cargo);
 
                         system("cls");
                         cout << VERDE << "Cadastrando Funcionario..." << RESET << endl;
@@ -465,13 +474,21 @@ void menu(int menu){
                             sleep(1); system("cls");    
                         }
                     }else if(x == "3"){
+                        int x;
                         if(funcionarios.size() > 0){
-                            ver(3);
+                            ler(3); ver(3);
                             cout << VERMELHO "\n--- DELETAR DADOS ---" << RESET << endl;
                             
                             cout << "Cpf: ";
-                            fflush(stdin); cin >> cpf; 
-                            ac = apagar_func(cpf);
+                            fflush(stdin); getline(cin, cpf);
+
+                            for(int i=0; i < funcionarios.size(); i++){
+                                if(cpf == funcionarios[i].get_cpf()){
+                                    x = funcionarios[i].get_id();
+                                }
+                            }
+                            
+                            ac = apagar_func(x);
 
                             if(ac == true){
                                 system("cls");
@@ -505,7 +522,7 @@ void menu(int menu){
                                     nome_fun = funcionarios[i].get_nome();cpf = funcionarios[i].get_cpf();
                                     senha = funcionarios[i].get_senha();endereco = funcionarios[i].get_endereco();
                                     email = funcionarios[i].get_email();cargo = funcionarios[i].get_cargo();
-                                    cartao = funcionarios[i].get_cartao();
+                                    cartao = funcionarios[i].get_cartao(); id = funcionarios[i].get_id();
 
                                     while(true){
                                         cout << CIANO "--- EDITAR ---" << RESET << endl;
@@ -530,7 +547,7 @@ void menu(int menu){
                                         else if(op == "4"){cout << "Digite uma nova \nSenha: "; fflush(stdin); getline(cin, senha);funcionarios[i].set_senha(senha);}
                                         else if(op == "5"){cout << "Digite um novo \nEndereco: "; fflush(stdin); getline(cin, endereco); funcionarios[i].set_endereco(endereco);}
                                         else if(op == "6"){cout << "Digite um novo \nCartao: "; fflush(stdin); getline(cin, cartao); funcionarios[i].set_cartao(cartao);}
-                                        else if(op == "7"){cout << "Digite um nov \nCargo: "; fflush(stdin); getline(cin, cargo); funcionarios[i].set_cargo(cargo);}
+                                        else if(op == "7"){cout << "Digite um novo \nCargo: "; fflush(stdin); getline(cin, cargo); funcionarios[i].set_cargo(cargo);}
                                         else if(op == "0")break;
                                         if(op != "0"){
                                             system("cls");
@@ -538,8 +555,9 @@ void menu(int menu){
                                             sleep(1);system("cls");
                                         }else cout << "Invalido" << endl;
                                     }
-                                    apagar_func(cpf);
-                                    add_func(nome_fun, cpf, email, senha, endereco, cartao, cargo);
+                                    
+                                    apagar_func(id);
+                                    add_func(nome_fun, cpf, email, senha, endereco, cartao, id, cargo);
                                     system("cls");
                                     cout << CIANO << "Salvando..." << RESET << endl;
                                     sleep(1);system("cls");fflush(stdin);     

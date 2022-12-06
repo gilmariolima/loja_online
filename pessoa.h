@@ -12,35 +12,39 @@ using namespace std;
 class Pessoa{
     private:
         string nome;
-        long int cpf;
+        string cpf;
         string email;
         string senha;
         string endereco;
         string cartao;
+        int id;
     public:
-        Pessoa(string nome, long int cpf, string email, string senha, string endereco, string cartao){
+        Pessoa(string nome, string cpf, string email, string senha, string endereco, string cartao, int id){
             set_nome(nome);
             set_cpf(cpf);
             set_email(email);
             set_senha(senha);
             set_endereco(endereco);
             set_cartao(cartao);
+            set_id(id);
         }
         Pessoa(){}
 
         void set_nome(string nome);
-        void set_cpf(long int cpf);
+        void set_cpf(string cpf);
         void set_email(string email);
         void set_senha(string senha);
         void set_endereco(string endereco);
         void set_cartao(string cartao);
+        void set_id(int id);
 
         string get_nome();
-        long int get_cpf();
+        string get_cpf();
         string get_email();
         string get_senha();
         string get_endereco();
         string get_cartao();
+        int get_id();
         
         bool login(string email, string senha);
 };
@@ -49,7 +53,7 @@ class Funcionario : public Pessoa{
     private:
         string cargo;
     public:
-        Funcionario(string nome, long int cpf, string email, string senha,string endereco, string cartao ,string cargo):Pessoa(nome, cpf, email, senha, endereco, cartao){
+        Funcionario(string nome, string cpf, string email, string senha,string endereco, string cartao, int id, string cargo) : Pessoa(nome, cpf, email, senha, endereco, cartao, id){
             set_cargo(cargo);
         }
         Funcionario():Pessoa(){}

@@ -16,11 +16,11 @@ void salvar(Produto aux, Pessoa novo, Funcionario nova, int tipo);
 void ler(int tipo);
 bool procurar(int codigo);
 bool apagar(int codigo);
+bool apagar_func(int num);
 
-bool apagar_func(long int cpf);
+int procurar_cpf(string cpf);
 
-
-void add_func(string nome, long int cpf, string email, string senha,string endereco, string cartao ,string cargo);
+void add_func(string nome, string cpf, string email, string senha,string endereco, string cartao ,int id , string cargo);
 void emitir_relatorio(int cod);
 void filtrar(string cat);
 
