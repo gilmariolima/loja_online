@@ -11,13 +11,14 @@ void menu(int tipo);
 
 void ver(int tipo);
 void add_produto(string nome,string tamanho,string categoria,string cor,string material, float preco, int quantidade, int codigo);
-void editar(int codigo);
+
 void salvar(Produto aux, Pessoa novo, Funcionario nova, int tipo);
 void ler(int tipo);
 bool procurar(int codigo);
 bool apagar(int codigo);
 
 bool apagar_func(long int cpf);
+
 
 void add_func(string nome, long int cpf, string email, string senha,string endereco, string cartao ,string cargo);
 void emitir_relatorio(int cod);
