@@ -218,7 +218,7 @@ void filtrar(string cat){
 void emitir_relatorio(int cod){
     ofstream fout;
     if(cod == 1){
-        fout.open("inventario.txt");
+        fout.open("relat_estoque.txt");
         fout << "ESTOQUE"<< endl;
         fout <<"-------------------------------------------------------------"<< endl;
         for(int i=0; i<estoque.size(); i++){
@@ -228,7 +228,17 @@ void emitir_relatorio(int cod){
             fout <<"Tam: "<<estoque[i].get_tamanho()<<"    ";
             fout <<"Cod: "<< estoque[i].get_codigo()<<endl;
             fout <<"-------------------------------------------------------------"<< endl;
-
+        }
+    }else if(cod == 2){
+        fout.open("relat_clientes.txt");
+        fout << "CLIENTES"<< endl;
+        fout <<"-------------------------------------------------------------"<< endl;
+        for(int i=0; i<clientes.size(); i++){
+            fout <<"Nome: "<<clientes[i].get_nome()<<endl;
+            fout <<"Cpf: "<<clientes[i].get_cpf()<<endl;
+            fout <<"Email: "<<clientes[i].get_email()<<endl;
+            fout <<"Endereco: "<<clientes[i].get_endereco()<<endl;
+            fout <<"-------------------------------------------------------------"<< endl;
         }
     }
 }
@@ -244,7 +254,7 @@ int login(){
     int permissao = 0;
     string cpf, senha;
 
-    cout << "--- LOGIN ---\n\nCpf: "; fflush(stdin); getline(cin, cpf);
+    cout << CIANO"--- LOGIN --- " RESET << "\n\nCpf: "; fflush(stdin); getline(cin, cpf);
     cout << "Senha: "; fflush(stdin); getline(cin, senha);
 
     for(int i=0; i < funcionarios.size(); i++){
@@ -259,12 +269,18 @@ int login(){
             return permissao;
         } 
     }
+    if(permissao == 0){
+        system("cls");
+        cout << VERMELHO <<"Invalido" << RESET <<endl;
+        sleep(1); system("cls");
+    }
     return permissao;
 }   
 
 void menu(){
-    int men;
-    string esc;
+    
+    system("cls");
+    int menu_; string esc;
     while(true){
         cout << CIANO "--- MENU ---\n" << RESET << endl;
         cout << "[ 1 ] Login" << endl;
@@ -272,10 +288,12 @@ void menu(){
         cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
         cout << ">> ";
         cin >> esc;
+        system("cls");
 
         if(esc == "1"){
-            ler(2); ver(2);
-            men = login();
+            ler(2); ler(3);
+            menu_ = login();
+
         }else if(esc == "2"){
             string nome_cliente, cpf, email, senha, endereco, cartao;
 
@@ -293,12 +311,22 @@ void menu(){
             system("cls");
             cout << VERDE << "Cadastrando..." << RESET << endl;
             sleep(1);system("cls");
+            continue;
+
         }else if(esc == "0"){
+            system("cls");
+            cout << "Encerrando..." << endl;
+            sleep(1); system("cls");
             break;
+        }else if(esc == "100"){ 
+            menu_ = 1;
+        }else{
+            system("cls");
+            cout << VERMELHO <<"Invalido" << RESET <<endl;
+            sleep(1); system("cls");
         }
         
-        if(men == 1){
-            ler(1);
+        if(menu_ == 1){
             system("cls");
             string opc; string x;
             string nome, tamanho, categoria, cor, material;
@@ -310,6 +338,7 @@ void menu(){
                 cout << "[ 2 ] Ver Estoque" << endl;
                 cout << "[ 3 ] Emitir Relatorios" << endl;
                 cout << "[ 4 ] Funcionarios" << endl;
+                cout << "[ 5 ] Clientes" << endl;
                 cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                 cout << ">> ";
                 cin >> opc;
@@ -465,13 +494,13 @@ void menu(){
                         }
                     }
                 }else if(opc == "3"){
-                    ler(1);
+                    ler(1);ler(2);
                     string opt;
                     while(true){
                         cout << VERDE "--- EMITIR RELATORIOS ---\n" << RESET << endl;
                         cout << "[ 1 ] Estoque" << endl;
-                        cout << "[ 2 ] Vendas" << endl;
-                        cout << "[ 3 ] Clientes Cadastrados" << endl;
+                        cout << "[ 2 ] Clientes Cadastrados" << endl;
+                        cout << "[ 3 ] Vendas" << endl;
                         cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                         cout << ">> ";
                         cin >> opt;
@@ -483,8 +512,12 @@ void menu(){
                             sleep(1); system("cls");
                         }else if(opt == "2"){
                             emitir_relatorio(2);
+                            cout << VERDE "Emitindo relatorio..." << RESET << endl;
+                            sleep(1); system("cls");
                         }else if(opt == "3"){
                             emitir_relatorio(3);
+                            cout << VERDE "Emitindo relatorio..." << RESET << endl;
+                            sleep(1); system("cls");
                         }else if(opt == "0"){
                             system("cls");
                             break;
@@ -647,9 +680,25 @@ void menu(){
                             sleep(1); system("cls");
                         }
                     }
+                }else if(opc == "5"){
+                    system("cls"); ler(2);
+                    string y;
+                    if(clientes.size() > 0){
+                        while(true){
+                            ver(2);
+                            cout << CIANO "[ 0 ] Sair" RESET << "\n>> "; cin >> y;
+                            if(y == "0"){
+                                system("cls");
+                                break;
+                            }
+                        }
+                    }else{
+                        cout << VERMELHO "Vazio" RESET << endl;
+                        sleep(1); system("cls");    
+                    }
                 }else if(opc == "0"){
                     system("cls");
-                    cout << "Encerrando..." << endl;
+                    cout << "Saindo..." << endl;
                     sleep(1); system("cls");
                     break;
                 }else{
@@ -658,7 +707,8 @@ void menu(){
                     sleep(1); system("cls");
                 }
             }
-        }else if(men == 2){
+        }else if(menu_ == 2){
+            system("cls");
             string opcao;
             while(true){
                 cout << CIANO "--- MENU ---\n" << RESET << endl;
@@ -696,7 +746,14 @@ void menu(){
                         }
                     }
                 }else if(opcao == "0"){
+                    system("cls");
+                    cout << "Saindo..." << endl;
+                    sleep(1); system("cls");
                     break;
+                }else{
+                    system("cls");
+                    cout << VERMELHO <<"Invalido" << RESET <<endl;
+                    sleep(1); system("cls");
                 }
             }
         }
