@@ -44,5 +44,3 @@ void Funcionario :: set_cargo(string cargo){
     this->cargo = cargo;
 }
 string Funcionario :: get_cargo(){return cargo;}
-
-

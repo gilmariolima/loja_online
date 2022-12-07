@@ -7,6 +7,7 @@
 #include <time.h>
 
 vector<Produto> estoque;
+vector<Produto> carrinho;
 vector<Funcionario> funcionarios;
 vector<Pessoa> clientes;
 
@@ -179,38 +180,25 @@ void ver(int tipo){
         }else {
             cout << "Vazio" << endl;
         }
-    }
-}
-
-void filtrar(string cat){
-    int cod;
-    cout << "Cod\tProd\t    Tam\t   Cor" << endl;
-    for(int i=0; i < estoque.size(); i++){
-        if(estoque[i].get_categoria() == cat){
-            cout << estoque[i].get_codigo() <<"\t"<< estoque[i].get_nome_produto();
-            cout << "\t    " << estoque[i].get_tamanho()<<"\t   "<<estoque[i].get_cor() << endl;
-
-        }
-    }
-    while(true){
-        cout << CIANO<<"\n[ 0 ] Sair\n"<< RESET;
-        cout << "\nDigite o Codigo do Produto\n>> ";
-        cin >> cod;
-        
-        if(cod == 0){
-            system("cls");
-            break;
-        }else{
-            system("cls");
-            for(int i=0; i < estoque.size(); i++){
-                if(cod == estoque[i].get_codigo()){
-                    cout <<"Codigo: " << estoque[i].get_codigo() << endl;
-                    cout <<"Produto: " << estoque[i].get_nome_produto() << endl;
-                    cout <<"Tamanho: " << estoque[i].get_tamanho() << endl;
-                    cout <<"Cor: " << estoque[i].get_cor() << endl;
-                    cout <<"Material: " << estoque[i].get_material() << endl;
-                }
+    }else if(tipo == 4){
+        if(carrinho.size() > 0){
+            float total = 0;
+            float total_parcial = 0;
+            cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            for(int i = 0; i < carrinho.size(); i++){
+                total_parcial = carrinho[i].get_quantidade() * carrinho[i].get_preco();
+                total += total_parcial;
+                cout <<"Produto: "<<carrinho[i].get_nome_produto()<<"    ";
+                cout <<"R$ "<<carrinho[i].get_preco()<<"    ";
+                cout <<"Qntd: "<<carrinho[i].get_quantidade()<<"    ";
+                cout <<"Tam: "<<carrinho[i].get_tamanho()<<"    ";
+                cout <<"Cod: "<< carrinho[i].get_codigo()<<endl;
+                cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
             }
+            cout << "Total a pagar: R$ " << total << endl;
+            cout << "\n";
+        }else{
+            cout << "Vazio" << endl;
         }
     }
 }
@@ -249,6 +237,7 @@ int id_ramdom(){
     id += 1;
     return id;
 }
+
 int procurar_nome(string nome){
     int tipo = 0;
     for(int i=0; i<funcionarios.size(); i++){
@@ -264,6 +253,32 @@ int procurar_nome(string nome){
         }
     }
     return tipo;
+}
+
+void filtrar(string cat){
+    int cod;
+    cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+    for(int i=0; i < estoque.size(); i++){
+        if(estoque[i].get_categoria() == cat){
+            cout <<"Cod: "<< estoque[i].get_codigo()<<"    ";
+            cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
+            cout <<"R$ "<<estoque[i].get_preco()<<"    ";
+            cout <<"Tam: "<<estoque[i].get_tamanho()<<endl;
+            cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+        }
+    }
+}
+
+int quantidade(int cod){
+    ler(1);
+    int qntd;
+
+    for(int i=0; i < estoque.size(); i++){
+        if(estoque[i].get_codigo() == cod){
+            qntd = estoque[i].get_quantidade();
+            return qntd;
+        }
+    }
 }
 
 string login(){
@@ -751,7 +766,7 @@ void menu(){
                 system("cls");
 
                 if(opcao == "1"){
-                    string x;
+                    string x; int cod;
                     while(true){
                         ler(1);
                         cout << CIANO "--- CATEGORIAS ---\n" << RESET << endl;
@@ -774,6 +789,91 @@ void menu(){
                             break;
                         }else{
                             cout << "Invalido" << endl;
+                            continue;
+                        }
+
+                        cout << "\nDigite o Cod para adicionar ao carrinho" << endl;
+                        cout << "[ 1 ] Filtrar por tamanho" << endl;
+                        cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
+                        cout << ">> "; cin >> cod;
+                        system("cls");
+
+                        if(cod == 1){
+                            //filtrar(tam);
+                        }else if(cod == 0){
+                            break;
+                        }else{
+                            for(int i=0; i < estoque.size(); i++){
+                                if(estoque[i].get_codigo() == cod){
+                                    int qntd;
+                                    cout << "Digite a quantidade: "; cin >> qntd;
+
+                                    if(estoque[i].get_quantidade() >= qntd && qntd > 0){
+                                        Produto novo(estoque[i].get_nome_produto(),estoque[i].get_tamanho(),
+                                        estoque[i].get_categoria(),estoque[i].get_cor(),estoque[i].get_material(),
+                                        estoque[i].get_preco(),qntd,estoque[i].get_codigo());
+
+                                        carrinho.push_back(novo);
+                                        system("cls");
+                                        cout << VERDE << "Adicionando ao Carrinho..." << RESET << endl;
+                                        sleep(1);system("cls");
+                                       
+                                    }else{
+                                        system("cls");
+                                        cout << VERMELHO << "Quantidade nao disponivel" << RESET << endl;
+                                        sleep(1);system("cls");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else if(opcao == "2"){
+                    string opt;
+                    if(carrinho.size() == 0){
+                        system("cls");
+                        cout << VERMELHO <<"Vazio" << RESET <<endl;
+                        sleep(1); system("cls");
+                    }else{
+                        while(true){
+                            ver(4);
+                            
+                            cout << "[ 1 ] Finalizar Compra" << endl;
+                            cout << "[ 2 ] Apagar Item" << endl;
+                            cout << "[ 0 ] Sair" << endl;
+                            cout << ">> "; cin >> opt;
+
+                            if(opt == "1"){
+                                string nome,tamanho,categoria,material,cor;
+                                float preco; int quanti,codigo;
+
+                                for(int i=0; i < carrinho.size(); i++){
+                                    nome = carrinho[i].get_nome_produto();
+                                    tamanho = carrinho[i].get_tamanho();
+                                    categoria = carrinho[i].get_categoria();
+                                    cor = carrinho[i].get_cor();
+                                    material = carrinho[i].get_material();
+                                    preco = carrinho[i].get_preco();
+                                    quanti = carrinho[i].get_quantidade();
+                                    codigo = carrinho[i].get_codigo();
+
+                                    int qntd = quantidade(carrinho[i].get_codigo());
+                                    apagar(carrinho[i].get_codigo());
+                                    add_produto(nome,tamanho,categoria,cor,material,preco,qntd - quanti,codigo);
+
+                                    carrinho.clear();
+                                    system("cls");
+                                    cout << VERDE << "Finalizando Compra..." << RESET << endl;
+                                    sleep(1);system("cls");
+                                    
+                                }
+                                break;
+
+                            }else if(opt == "2"){
+                                
+                            }else if(opt == "0"){
+                                system("cls");
+                                break;
+                            }
                         }
                     }
                 }else if(opcao == "0"){

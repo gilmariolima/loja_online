@@ -25,6 +25,5 @@ int id_ramdom();
 int procurar_cpf(string cpf);
 
 void emitir_relatorio(int cod);
-void filtrar(string cat);
 
 #endif
