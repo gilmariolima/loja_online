@@ -249,40 +249,65 @@ int id_ramdom(){
     id += 1;
     return id;
 }
+int procurar_nome(string nome){
+    int tipo = 0;
+    for(int i=0; i<funcionarios.size(); i++){
+        if(funcionarios[i].get_nome() == nome){
+            tipo = 1;
+            return tipo;
+        }
+    }
+    for(int i=0; i<clientes.size(); i++){
+        if(clientes[i].get_nome() == nome){
+            tipo = 2;
+            return tipo;
+        }
+    }
+    return tipo;
+}
 
-int login(){
-    int permissao = 0;
-    string cpf, senha;
+string login(){
+    
+    string cpf, senha, nome;
 
     cout << CIANO"--- LOGIN --- " RESET << "\n\nCpf: "; fflush(stdin); getline(cin, cpf);
     cout << "Senha: "; fflush(stdin); getline(cin, senha);
 
     for(int i=0; i < funcionarios.size(); i++){
         if(funcionarios[i].get_cpf() == cpf && funcionarios[i].get_senha() == senha){
-            permissao = 1;
-            return permissao;
+            system("cls");
+            nome = funcionarios[i].get_nome();
+            cout << VERDE <<"Bem Vindo " <<nome<< RESET <<endl;
+            sleep(1); system("cls");
+
+            return nome;
         } 
     }
     for(int i=0; i < clientes.size(); i++){
         if(clientes[i].get_cpf() == cpf && clientes[i].get_senha() == senha){
-            permissao = 2;
-            return permissao;
+            system("cls");
+            nome = clientes[i].get_nome();
+            cout << VERDE <<"Bem Vindo " <<nome<< RESET <<endl;
+            sleep(1); system("cls");
+ 
+            return nome;
         } 
     }
-    if(permissao == 0){
-        system("cls");
-        cout << VERMELHO <<"Invalido" << RESET <<endl;
-        sleep(1); system("cls");
-    }
-    return permissao;
+    
+    system("cls");
+    cout << VERMELHO <<"Invalido" << RESET <<endl;
+    sleep(1); system("cls");
+
+    return "nada";
 }   
 
 void menu(){
-    
     system("cls");
-    int menu_; string esc;
+    string nome_aux; string esc;
+    int menu_;
+    
     while(true){
-        cout << CIANO "--- MENU ---\n" << RESET << endl;
+        cout << CIANO "--- MENU ---\n"<< RESET << endl;
         cout << "[ 1 ] Login" << endl;
         cout << "[ 2 ] Registre-se" << endl;
         cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
@@ -292,7 +317,8 @@ void menu(){
 
         if(esc == "1"){
             ler(2); ler(3);
-            menu_ = login();
+            nome_aux = login();
+            menu_ = procurar_nome(nome_aux);
 
         }else if(esc == "2"){
             string nome_cliente, cpf, email, senha, endereco, cartao;
@@ -328,12 +354,15 @@ void menu(){
         
         if(menu_ == 1){
             system("cls");
+
             string opc; string x;
             string nome, tamanho, categoria, cor, material;
             float preco; int qntd, cod;
 
             while(true){
-                cout << CIANO "--- MENU ---\n" << RESET << endl;
+                cout << CIANO << "--- MENU ---\t" << RESET;
+                cout << VERDE << nome_aux << RESET << "\n\n";
+                
                 cout << "[ 1 ] Cadastrar Produtos" << endl;
                 cout << "[ 2 ] Ver Estoque" << endl;
                 cout << "[ 3 ] Emitir Relatorios" << endl;
@@ -711,7 +740,9 @@ void menu(){
             system("cls");
             string opcao;
             while(true){
-                cout << CIANO "--- MENU ---\n" << RESET << endl;
+                cout << CIANO << "--- MENU ---\t" << RESET;
+                cout << VERDE << nome_aux << RESET << "\n\n";
+
                 cout << "[ 1 ] Iniciar Compra" << endl;
                 cout << "[ 2 ] Ver Carrinho" << endl;
                 cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
