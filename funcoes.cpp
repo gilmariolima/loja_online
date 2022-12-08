@@ -115,6 +115,26 @@ bool apagar_func(int num){
     return achei;  
 }
 
+void apagar_cl(int num){
+    Pessoa aux;
+    ifstream arq;
+    ofstream fout;
+    arq.open("clientes.dat",ios_base::binary);
+    fout.open("novo.dat",ios_base::binary|ios_base::app);
+
+    while(arq.read((char*)&aux, sizeof(Pessoa))){
+        if(aux.get_id() != num){
+            fout.write((char*)&aux, sizeof(Pessoa));  
+        }
+    }
+    fout.close();
+    arq.close();
+    remove("clientes.dat");
+    rename("novo.dat","clientes.dat");
+}
+
+
+
 bool procurar(int codigo){
     bool achei = false;
 
@@ -255,19 +275,33 @@ int procurar_nome(string nome){
     return tipo;
 }
 
-void filtrar(string cat){
-    int cod;
-    cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
-    for(int i=0; i < estoque.size(); i++){
-        if(estoque[i].get_categoria() == cat){
-            cout <<"Cod: "<< estoque[i].get_codigo()<<"    ";
-            cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
-            cout <<"R$ "<<estoque[i].get_preco()<<"    ";
-            cout <<"Tam: "<<estoque[i].get_tamanho()<<endl;
-            cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+void filtrar(string cat, string tam, int tipo){
+    if(tipo == 1){
+        int cod;
+        cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+        for(int i=0; i < estoque.size(); i++){
+            if(estoque[i].get_categoria() == cat){
+                cout <<"Cod: "<< estoque[i].get_codigo()<<"    ";
+                cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
+                cout <<"R$ "<<estoque[i].get_preco()<<"    ";
+                cout <<"Tam: "<<estoque[i].get_tamanho()<<endl;
+                cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            }
+        }
+    }else if(tipo == 2){
+        cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+        for(int i=0; i < estoque.size(); i++){
+            if(estoque[i].get_tamanho() == tam && estoque[i].get_categoria() == cat){
+                cout <<"Cod: "<< estoque[i].get_codigo()<<"    ";
+                cout <<"Produto: "<<estoque[i].get_nome_produto()<<"    ";
+                cout <<"R$ "<<estoque[i].get_preco()<<"    ";
+                cout <<"Tam: "<<estoque[i].get_tamanho()<<endl;
+                cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+            }
         }
     }
 }
+
 
 int quantidade(int cod){
     ler(1);
@@ -758,15 +792,16 @@ void menu(){
                 cout << CIANO << "--- MENU ---\t" << RESET;
                 cout << VERDE << nome_aux << RESET << "\n\n";
 
-                cout << "[ 1 ] Iniciar Compra" << endl;
+                cout << "[ 1 ] Adicionar item" << endl;
                 cout << "[ 2 ] Ver Carrinho" << endl;
+                cout << "[ 3 ] Editar Perfil" << endl;
                 cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                 cout << ">> ";
                 cin >> opcao;
                 system("cls");
 
                 if(opcao == "1"){
-                    string x; int cod;
+                    string x, categoria; int cod;
                     while(true){
                         ler(1);
                         cout << CIANO "--- CATEGORIAS ---\n" << RESET << endl;
@@ -779,11 +814,14 @@ void menu(){
                         system("cls"); 
 
                         if(x == "1"){
-                            filtrar("roupa");
+                            filtrar("roupa", "", 1);
+                            categoria = "roupa";
                         }else if(x == "2"){
-                            filtrar("moda intima");
+                            filtrar("moda intima", "", 1);
+                            categoria = "moda intima";
                         }else if(x == "3"){
-                            filtrar("calcado");
+                            filtrar("calcado" ,"", 1);
+                            categoria = "calcado";
                         }else if(x == "0"){
                             system("cls");
                             break;
@@ -792,37 +830,55 @@ void menu(){
                             continue;
                         }
 
-                        cout << "\nDigite o Cod para adicionar ao carrinho" << endl;
-                        cout << "[ 1 ] Filtrar por tamanho" << endl;
-                        cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
-                        cout << ">> "; cin >> cod;
-                        system("cls");
+                        while(true){
+                            cout << "\nDigite o Cod para adicionar ao carrinho" << endl;
+                            cout << "[ 1 ] Filtrar por tamanho" << endl;
+                            cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
+                            cout << ">> "; cin >> cod;
+                            system("cls");
 
-                        if(cod == 1){
-                            //filtrar(tam);
-                        }else if(cod == 0){
-                            break;
-                        }else{
-                            for(int i=0; i < estoque.size(); i++){
-                                if(estoque[i].get_codigo() == cod){
-                                    int qntd;
-                                    cout << "Digite a quantidade: "; cin >> qntd;
+                            if(cod == 1){
+                                string tam;
+                                cout << "--- FILTRAR POR TAMANHO ---\n\n";
+                                cout << "Digite o Tamanho: "; cin >> tam;
+                                system("cls");
+                                filtrar(categoria, tam, 2);
+                                
+                            }else if(cod == 0){
+                                break;
+                            }else{
+                                bool achei = false;
+                                for(int i=0; i < estoque.size(); i++){
+                                    if(estoque[i].get_codigo() == cod){
+                                        achei = true;
+                                        int qntd;
+                              
+                                        cout << "Digite a quantidade: "; cin >> qntd;
 
-                                    if(estoque[i].get_quantidade() >= qntd && qntd > 0){
-                                        Produto novo(estoque[i].get_nome_produto(),estoque[i].get_tamanho(),
-                                        estoque[i].get_categoria(),estoque[i].get_cor(),estoque[i].get_material(),
-                                        estoque[i].get_preco(),qntd,estoque[i].get_codigo());
+                                        if(estoque[i].get_quantidade() >= qntd && qntd > 0){
+                                            Produto novo(estoque[i].get_nome_produto(),estoque[i].get_tamanho(),
+                                            estoque[i].get_categoria(),estoque[i].get_cor(),estoque[i].get_material(),
+                                            estoque[i].get_preco(),qntd,estoque[i].get_codigo());
 
-                                        carrinho.push_back(novo);
-                                        system("cls");
-                                        cout << VERDE << "Adicionando ao Carrinho..." << RESET << endl;
-                                        sleep(1);system("cls");
-                                       
-                                    }else{
-                                        system("cls");
-                                        cout << VERMELHO << "Quantidade nao disponivel" << RESET << endl;
-                                        sleep(1);system("cls");
+                                            carrinho.push_back(novo);
+                                            system("cls");
+                                            cout << VERDE << "Adicionando ao Carrinho..." << RESET << endl;
+                                            sleep(1);system("cls");
+                                            filtrar(categoria, "", 1);
+                                            continue;      
+                                        }else{
+                                            system("cls");
+                                            cout << VERMELHO << "Quantidade nao disponivel" << RESET << endl;
+                                            sleep(1);system("cls");
+                                            filtrar(categoria, "", 1);
+                                            continue;
+                                        }
                                     }
+                                }if(achei == false){
+                                    system("cls");
+                                    cout << VERMELHO <<"Invalido" << RESET <<endl;
+                                    sleep(1); system("cls");
+                                    filtrar(categoria, "", 1);
                                 }
                             }
                         }
@@ -836,38 +892,54 @@ void menu(){
                     }else{
                         while(true){
                             ver(4);
-                            
                             cout << "[ 1 ] Finalizar Compra" << endl;
                             cout << "[ 2 ] Apagar Item" << endl;
                             cout << "[ 0 ] Sair" << endl;
                             cout << ">> "; cin >> opt;
 
                             if(opt == "1"){
-                                string nome,tamanho,categoria,material,cor;
-                                float preco; int quanti,codigo;
+                                system("cls");
+                                string resp;
+                                for(int i=0; i < clientes.size(); i++){
+                                    if(nome_aux == clientes[i].get_nome()){
+                                        cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+                                        cout << "Nome: "<< clientes[i].get_nome() << endl;
+                                        cout << "Cpf: "<< clientes[i].get_cpf() << endl;
+                                        cout << "Email: "<< clientes[i].get_email() << endl;
+                                        cout << "Endereco: "<< clientes[i].get_endereco() << endl;
+                                        cout << "Cartao de credito: "<< clientes[i].get_cartao() << endl;
+                                        cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
+                                    }
+                                }
+                                cout << "Seus dados estao corretos? s / n\n>> "; cin >> resp;
 
-                                for(int i=0; i < carrinho.size(); i++){
-                                    nome = carrinho[i].get_nome_produto();
-                                    tamanho = carrinho[i].get_tamanho();
-                                    categoria = carrinho[i].get_categoria();
-                                    cor = carrinho[i].get_cor();
-                                    material = carrinho[i].get_material();
-                                    preco = carrinho[i].get_preco();
-                                    quanti = carrinho[i].get_quantidade();
-                                    codigo = carrinho[i].get_codigo();
+                                if(resp == "s"){
+                                    string nome,tamanho,categoria,material,cor;
+                                    float preco; int quanti,codigo;
 
-                                    int qntd = quantidade(carrinho[i].get_codigo());
-                                    apagar(carrinho[i].get_codigo());
-                                    add_produto(nome,tamanho,categoria,cor,material,preco,qntd - quanti,codigo);
+                                    for(int i=0; i < carrinho.size(); i++){
+                                        nome = carrinho[i].get_nome_produto();
+                                        tamanho = carrinho[i].get_tamanho();
+                                        categoria = carrinho[i].get_categoria();
+                                        cor = carrinho[i].get_cor();
+                                        material = carrinho[i].get_material();
+                                        preco = carrinho[i].get_preco();
+                                        quanti = carrinho[i].get_quantidade();
+                                        codigo = carrinho[i].get_codigo();
 
-                                    carrinho.clear();
-                                    system("cls");
-                                    cout << VERDE << "Finalizando Compra..." << RESET << endl;
-                                    sleep(1);system("cls");
+                                        int qntd = quantidade(carrinho[i].get_codigo());
+                                        apagar(carrinho[i].get_codigo());
+                                        add_produto(nome,tamanho,categoria,cor,material,preco,qntd - quanti,codigo);
+
+                                        carrinho.clear();
+                                        system("cls");
+                                        cout << VERDE << "Finalizando Compra..." << RESET << endl;
+                                        sleep(1);system("cls");  
+                                    }
+                                    break;
+                                }else if(resp == "n"){
                                     
                                 }
-                                break;
-
                             }else if(opt == "2"){
                                 
                             }else if(opt == "0"){
@@ -876,7 +948,66 @@ void menu(){
                             }
                         }
                     }
+                }else if(opcao == "3"){   
+                    for(int i=0; i < clientes.size(); i++){
+                        if(clientes[i].get_nome() == nome_aux){
+                            string nom, cp, end, cart, senh, emai, op; int id;
+                            while(true){
+                                nom = clientes[i].get_nome(); cp = clientes[i].get_cpf();
+                                end = clientes[i].get_endereco();  cart = clientes[i].get_cartao();
+                                id = clientes[i].get_id(); senh = clientes[i].get_senha();
+                                emai = clientes[i].get_email();
+
+                                cout << clientes[i].get_id() << endl;
+
+                                cout << CIANO "--- EDITAR ---" << RESET << endl;
+                                cout << "Nome:       " << nom << endl;
+                                cout << "Cpf:        " << cp << endl;
+                                cout << "[ 1 ] Email:      " << emai << endl;
+                                cout << "[ 2 ] Senha:      " << senh << endl;
+                                cout << "[ 3 ] Endereco:   " << end << endl;
+                                cout << "[ 4 ] Cartao:     " << cart << endl;
+                                
+                                cout << endl;
+                                cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
+                                cout << "\nO que deseja alterar: ";
+                                fflush(stdin); cin >> op;
+
+                                system("cls");
+
+                                
+                                if(op == "1"){cout << "Digite um novo \nEmail: "; fflush(stdin); getline(cin, emai);clientes[i].set_email(emai);}
+                                else if(op == "2"){cout << "Digite uma nova \nSenha: "; fflush(stdin); getline(cin, senh);clientes[i].set_senha(senh);}
+                                else if(op == "3"){cout << "Digite um novo \nEndereco: "; fflush(stdin); getline(cin, end);clientes[i].set_endereco(end);}
+                                else if(op == "4"){cout << "Digite um novo \nCartao: "; fflush(stdin); getline(cin, cart);clientes[i].set_cartao(cart);}
+                            
+                                else if(op == "0"){
+                                   
+                                    Produto aux; Funcionario novo;
+                                    Pessoa nova(nom, cp, emai, senh, end, cart, id+1);
+                                    salvar(aux, nova, novo, 2);
+
+                                    Pessoa sla;
+                                    ifstream arq;
+                                    ofstream fout;
+                                    arq.open("clientes.dat",ios_base::binary);
+                                    fout.open("novo.dat",ios_base::binary|ios_base::app);
+
+                                    while(arq.read((char*)&sla, sizeof(Pessoa))){
+                                        if(sla.get_id() != id){
+                                            fout.write((char*)&sla, sizeof(Pessoa));  
+                                        }
+                                    }
+                                    fout.close();
+                                    arq.close();
+                                }    
+                                else if(op != "0"){cout << "alterando..." << endl;}
+                            }
+                        }
+                    }
+
                 }else if(opcao == "0"){
+
                     system("cls");
                     cout << "Saindo..." << endl;
                     sleep(1); system("cls");
