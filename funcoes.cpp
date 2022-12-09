@@ -833,7 +833,7 @@ void menu(){
 
                         while(true){
                             cout << "\nDigite o Cod para adicionar ao carrinho" << endl;
-                            cout << "[  ] Filtrar por tamanho" << endl;
+                            cout << "[ 1 ] Filtrar por tamanho" << endl;
                             cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                             cout << ">> "; cin >> cod;
                             system("cls");
