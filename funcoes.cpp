@@ -91,28 +91,45 @@ bool apagar(int codigo){
     rename("novo.dat","estoque.dat");
 }
 
-bool apagar_func(int num){
-    Funcionario aux;
+bool apagar_pessoa(int num, int tipo){
+    Funcionario aux; Pessoa novo;
     ifstream arq;
     ofstream fout;
     bool achei = false;
-    
-    arq.open("func.dat",ios_base::binary);
-    fout.open("novo.dat",ios_base::binary|ios_base::app);
 
-    while(arq.read((char*)&aux, sizeof(Funcionario))){
-        if(aux.get_id() != num){
-            fout.write((char*)&aux, sizeof(Funcionario));  
-        }else{
-            achei = true;
+    if(tipo == 1){
+        arq.open("func.dat",ios_base::binary);
+        fout.open("novo.dat",ios_base::binary|ios_base::app);
+
+        while(arq.read((char*)&aux, sizeof(Funcionario))){
+            if(aux.get_id() != num){
+                fout.write((char*)&aux, sizeof(Funcionario));  
+            }else{
+                achei = true;
+            }
         }
+        fout.close();
+        arq.close();
+        remove("func.dat");
+        rename("novo.dat","func.dat");
+        return achei;  
+    }else if(tipo == 2){
+        arq.open("clientes.dat",ios_base::binary);
+        fout.open("novo.dat",ios_base::binary|ios_base::app);
+
+        while(arq.read((char*)&novo, sizeof(Pessoa))){
+            if(novo.get_id() != num){
+                fout.write((char*)&novo, sizeof(Pessoa));  
+            }else{
+                achei = true;
+            }
+        }
+        fout.close();
+        arq.close();
+        remove("clientes.dat");
+        rename("novo.dat","clientes.dat");
+        return achei; 
     }
-    
-    fout.close();
-    arq.close();
-    remove("func.dat");
-    rename("novo.dat","func.dat");
-    return achei;  
 }
 
 bool procurar(int codigo){
@@ -651,7 +668,7 @@ void menu(){
                                     }
                                 }
                                 
-                                ac = apagar_func(x);
+                                ac = apagar_pessoa(x, 1);
 
                                 if(ac == true){
                                     system("cls");
@@ -717,7 +734,7 @@ void menu(){
                                                 sleep(1);system("cls");
                                             }else cout << "Invalido" << endl;
                                         }
-                                        apagar_func(id);
+                                        apagar_pessoa(id, 1);
                                         add_func(nome_fun, cpf, email, senha, endereco, cartao, id, cargo);
                                         system("cls");
                                         cout << CIANO << "Salvando..." << RESET << endl;
@@ -770,6 +787,7 @@ void menu(){
             }
         }else if(menu_ == 2){
             system("cls");
+            ler(2);
             string opcao;
             while(true){
                 cout << CIANO << "--- MENU ---\t" << RESET;
@@ -815,7 +833,7 @@ void menu(){
 
                         while(true){
                             cout << "\nDigite o Cod para adicionar ao carrinho" << endl;
-                            cout << "[ 1 ] Filtrar por tamanho" << endl;
+                            cout << "[  ] Filtrar por tamanho" << endl;
                             cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                             cout << ">> "; cin >> cod;
                             system("cls");
@@ -877,7 +895,7 @@ void menu(){
                             ver(4);
                             cout << "[ 1 ] Finalizar Compra" << endl;
                             cout << "[ 2 ] Apagar Item" << endl;
-                            cout << "[ 0 ] Sair" << endl;
+                            cout << CIANO "[ 0 ] Sair" RESET << endl;
                             cout << ">> "; cin >> opt;
 
                             if(opt == "1"){
@@ -922,7 +940,7 @@ void menu(){
                                     carrinho.clear();
                                     break;
                                 }else if(resp == "n"){
-                                    
+                                    system("cls");
                                 }
                             }else if(opt == "2"){
                                 vector<Produto> novo_car;
@@ -945,9 +963,55 @@ void menu(){
                                 break;
                             }
                         }
-                    }   
+                    }
+                }else if(opcao == "3"){
+                    ler(2);string op;
+                    for(int i=0; i<clientes.size(); i++){
+                        
+                        if(clientes[i].get_nome() == nome_aux){
+                            nome_cl = clientes[i].get_nome();cpf_cl = clientes[i].get_cpf();
+                            senha_cl = clientes[i].get_senha();end_cl = clientes[i].get_endereco();
+                            email_cl = clientes[i].get_email();
+                            cartao_cl = clientes[i].get_cartao(); id_cl = clientes[i].get_id();
+
+                            while(true){
+                                cout << CIANO "--- EDITAR ---" << RESET << endl;
+                                cout << "[ 1 ] Nome:       " << clientes[i].get_nome() << endl;
+                                cout << "[ 2 ] Cpf:        " << clientes[i].get_cpf() << endl;
+                                cout << "[ 3 ] Email:      " << clientes[i].get_email() << endl;
+                                cout << "[ 4 ] Senha:      " << clientes[i].get_senha() << endl;
+                                cout << "[ 5 ] Endereco:   " << clientes[i].get_endereco() << endl;
+                                cout << "[ 6 ] Cartao:     " << clientes[i].get_cartao() << endl;
+                                cout << endl;
+                                cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
+                                cout << "\nO que deseja alterar: ";
+                                fflush(stdin); cin >> op;
+
+                                system("cls");
+
+                                if(op == "1"){cout << "Digite um novo \nNome: "; fflush(stdin); getline(cin, nome_cl); clientes[i].set_nome(nome_cl);nome_aux = nome_cl;}
+                                else if(op == "2"){cout << "Digite um novo \nCpf: "; fflush(stdin); getline(cin, cpf_cl); clientes[i].set_cpf(cpf_cl);}
+                                else if(op == "3"){cout << "Digite um novo \nEmail: "; fflush(stdin); getline(cin, email_cl);clientes[i].set_email(email_cl);}
+                                else if(op == "4"){cout << "Digite uma nova \nSenha: "; fflush(stdin); getline(cin, senha_cl);clientes[i].set_senha(senha_cl);}
+                                else if(op == "5"){cout << "Digite um novo \nEndereco: "; fflush(stdin); getline(cin, end_cl); clientes[i].set_endereco(end_cl);}
+                                else if(op == "6"){cout << "Digite um novo \nCartao: "; fflush(stdin); getline(cin, cartao_cl); clientes[i].set_cartao(cartao_cl);}
+                                
+                                else if(op == "0")break;
+                                if(op != "0"){
+                                    system("cls");
+                                    cout << CIANO << "Alterando dados..." << RESET << endl;
+                                    sleep(1);system("cls");
+                                }else cout << "Invalido" << endl;
+                            }
+                            
+                            apagar_pessoa(id_cl, 2);
+                            add_cliente(nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, id_cl+1);
+                            system("cls");
+                            cout << CIANO << "Salvando..." << RESET << endl;
+                            sleep(1);system("cls");
+                        }
+                    }    
                 }else if(opcao == "0"){
-                    
                     system("cls");
                     cout << "Saindo..." << endl;
                     sleep(1); system("cls");
