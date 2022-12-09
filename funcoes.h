@@ -19,6 +19,7 @@ void ler(int tipo);
 bool procurar(int codigo);
 bool apagar(int codigo);
 bool apagar_func(int num);
+bool apagar_cl(int num);
 string login();
 int id_ramdom();
 
