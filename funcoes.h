@@ -20,7 +20,6 @@ bool procurar(int codigo);
 bool apagar(int codigo);
 bool apagar_pessoa(int num, int tipo);
 
-int login();
 int id_ramdom();
 
 int procurar_cpf(string cpf);

@@ -299,49 +299,14 @@ int quantidade(int cod){
     }
 }
 
-int login(){
-    
-    string cpf, senha, nome; int id;
-
-    cout << CIANO"--- LOGIN --- " RESET << "\n\nCpf: "; fflush(stdin); getline(cin, cpf);
-    cout << "Senha: "; fflush(stdin); getline(cin, senha);
-
-    for(int i=0; i < funcionarios.size(); i++){
-        if(funcionarios[i].get_cpf() == cpf && funcionarios[i].get_senha() == senha){
-            system("cls");
-            nome = funcionarios[i].get_nome();
-            cout << VERDE <<"Bem Vindo " <<nome<< RESET <<endl;
-            sleep(1); system("cls");
-
-            return 1;
-        } 
-    }
-    for(int i=0; i < clientes.size(); i++){
-        if(clientes[i].get_cpf() == cpf && clientes[i].get_senha() == senha){
-            system("cls");
-            nome = clientes[i].get_nome();
-            cout << VERDE <<"Bem Vindo " <<nome<< RESET <<endl;
-            sleep(1); system("cls");
- 
-            return 2;
-        } 
-    }
-    
-    system("cls");
-    cout << VERMELHO <<"Invalido" << RESET <<endl;
-    sleep(1); system("cls");
-
-    return 1000;
-}   
-
 void menu(){
     system("cls");
-     string nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, telefone_cl ,opc;
+    string nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, telefone_cl ,opc;
     int id_cl;
     string nome_aux; string esc;
-    int menu_; int iden;
     
     while(true){
+        int menu_ = 0;
         cout << CIANO "--- MENU ---\n"<< RESET << endl;
         cout << "[ 1 ] Login" << endl;
         cout << "[ 2 ] Registre-se" << endl;
@@ -351,8 +316,38 @@ void menu(){
         system("cls");
 
         if(esc == "1"){
+            string cpf, senha; int iden; bool achei = false;
             ler(2); ler(3);
-            menu_ = login();
+
+            cout << CIANO"--- LOGIN --- " RESET << "\n\nCpf: "; fflush(stdin); getline(cin, cpf);
+            cout << "Senha: "; fflush(stdin); getline(cin, senha);
+
+            for(int i=0; i < funcionarios.size(); i++){
+                if(funcionarios[i].get_cpf() == cpf && funcionarios[i].get_senha() == senha){
+                    menu_ = 1; achei = true; nome_aux = funcionarios[i].get_nome(); 
+
+                    system("cls");
+                    cout << VERDE <<"Bem Vindo " <<funcionarios[i].get_nome()<< RESET <<endl;
+                    sleep(1); system("cls");
+                } 
+            }
+            for(int i=0; i < clientes.size(); i++){
+                if(clientes[i].get_cpf() == cpf && clientes[i].get_senha() == senha){
+                    menu_ = 2; achei = true; nome_aux = clientes[i].get_nome(); 
+
+                    system("cls");
+                    cout << VERDE <<"Bem Vindo " <<clientes[i].get_nome()<< RESET <<endl;
+                    sleep(1); system("cls");
+                } 
+            }
+            if(achei == false){
+                menu_ = 0;
+                system("cls");
+                cout << VERMELHO << "Invalido" << RESET << endl;
+                sleep(1);
+                system("cls");
+            }
+            
 
         }else if(esc == "2"){
             string nome_cliente, cpf, email, senha, endereco, cartao, telefone;
