@@ -26,6 +26,9 @@ void Pessoa :: set_endereco(string endereco){
 void Pessoa :: set_cartao(string cartao){
     this->cartao = cartao;
 }
+void Pessoa :: set_telefone(string telefone){
+    this->telefone = telefone;
+}
 void Pessoa :: set_id(int id){
     this->id = id;
 }
@@ -36,6 +39,7 @@ string Pessoa :: get_email(){return email;}
 string Pessoa :: get_senha(){return senha;}
 string Pessoa :: get_endereco(){return endereco;}
 string Pessoa :: get_cartao(){return cartao;}
+string Pessoa :: get_telefone(){return telefone;}
 int Pessoa :: get_id(){return id;}
 
 //------------------------------------------

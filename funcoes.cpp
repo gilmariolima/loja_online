@@ -57,14 +57,14 @@ void add_produto(string nome,string tamanho,string categoria,string cor,string m
     salvar(aux, nova, novo, 1);
 }
 
-void add_cliente(string nome, string cpf, string email, string senha,string endereco, string cartao, int id){
-    Pessoa nova(nome, cpf, email, senha, endereco, cartao, id);
+void add_cliente(string nome, string cpf, string email, string senha,string endereco, string cartao,string telefone ,int id){
+    Pessoa nova(nome, cpf, email, senha, endereco, cartao,telefone ,id);
     Funcionario novo; Produto aux;
     salvar(aux, nova, novo, 2);
 }
 
-void add_func(string nome, string cpf, string email, string senha,string endereco, string cartao ,int id, string cargo){
-    Funcionario novo(nome,cpf,email,senha,endereco,cartao,id,cargo);
+void add_func(string nome, string cpf, string email, string senha,string endereco, string cartao , string telefone, int id, string cargo){
+    Funcionario novo(nome,cpf,email,senha,endereco,cartao,telefone,id,cargo);
     Produto aux; Pessoa nova;
     salvar(aux, nova, novo, 3);
 }
@@ -180,6 +180,7 @@ void ver(int tipo){
                 cout << "Cpf: "<< clientes[i].get_cpf() << endl;
                 cout << "Email: "<< clientes[i].get_email() << endl;
                 cout << "Id: "<< clientes[i].get_id() << endl;
+                cout << "Telefone: "<< clientes[i].get_telefone() << endl;
                 cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
             }
         }else {
@@ -193,6 +194,7 @@ void ver(int tipo){
                 cout << "Cpf: "<< funcionarios[i].get_cpf() << endl;
                 cout << "Email: "<< funcionarios[i].get_email() << endl;
                 cout << "Cargo: "<< funcionarios[i].get_cargo() << endl;
+                cout << "Telefone: "<< funcionarios[i].get_telefone() << endl;
                 cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
             }
         }else {
@@ -244,6 +246,7 @@ void emitir_relatorio(int cod){
             fout <<"Cpf: "<<clientes[i].get_cpf()<<endl;
             fout <<"Email: "<<clientes[i].get_email()<<endl;
             fout <<"Endereco: "<<clientes[i].get_endereco()<<endl;
+            fout <<"Telefone: "<<clientes[i].get_telefone()<<endl;
             fout <<"-------------------------------------------------------------"<< endl;
         }
     }
@@ -350,7 +353,7 @@ string login(){
 
 void menu(){
     system("cls");
-     string nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, opc;
+     string nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, telefone_cl ,opc;
     int id_cl;
     string nome_aux; string esc;
     int menu_;
@@ -370,7 +373,7 @@ void menu(){
             menu_ = procurar_nome(nome_aux);
 
         }else if(esc == "2"){
-            string nome_cliente, cpf, email, senha, endereco, cartao;
+            string nome_cliente, cpf, email, senha, endereco, cartao, telefone;
 
             cout << VERDE "--- CADASTRO DE CLIENTES ---\n" << RESET << endl;
             cout << "Nome: ";     fflush(stdin); getline(cin, nome_cliente);
@@ -379,10 +382,11 @@ void menu(){
             cout << "Senha: ";    fflush(stdin); getline(cin, senha);
             cout << "Endereco: "; fflush(stdin); getline(cin, endereco);
             cout << "Cartao: ";   fflush(stdin); getline(cin, cartao);
+            cout << "Telefone: ";   fflush(stdin); getline(cin, telefone);
             
             int id = id_ramdom();
 
-            add_cliente(nome_cliente, cpf, email, senha, endereco, cartao, id);
+            add_cliente(nome_cliente, cpf, email, senha, endereco, cartao,telefone ,id);
             system("cls");
             cout << VERDE << "Cadastrando..." << RESET << endl;
             sleep(1);system("cls");
@@ -605,7 +609,7 @@ void menu(){
                         }
                     }
                 }else if(opc == "4"){
-                    string nome_fun, email, senha, endereco, cartao, cargo, cpf; 
+                    string nome_fun, email, senha, endereco, cartao, cargo,telefone ,cpf; 
                     bool ac; int id;
                     
                     while(true){
@@ -628,10 +632,10 @@ void menu(){
                             cout << "Endereco: "; fflush(stdin); getline(cin, endereco);
                             cout << "Cartao: ";   fflush(stdin); getline(cin, cartao);
                             cout << "Cargo: ";    fflush(stdin); getline(cin, cargo);
-
+                            cout << "Telefone: ";    fflush(stdin); getline(cin, telefone);
                             id = id_ramdom();
         
-                            add_func(nome_fun, cpf, email, senha, endereco, cartao, id, cargo);
+                            add_func(nome_fun, cpf, email, senha, endereco, cartao,telefone ,id, cargo);
 
                             system("cls");
                             cout << VERDE << "Cadastrando Funcionario..." << RESET << endl;
@@ -702,6 +706,7 @@ void menu(){
                                         senha = funcionarios[i].get_senha();endereco = funcionarios[i].get_endereco();
                                         email = funcionarios[i].get_email();cargo = funcionarios[i].get_cargo();
                                         cartao = funcionarios[i].get_cartao(); id = funcionarios[i].get_id();
+                                        telefone = funcionarios[i].get_telefone();
 
                                         while(true){
                                             cout << CIANO "--- EDITAR ---" << RESET << endl;
@@ -712,6 +717,7 @@ void menu(){
                                             cout << "[ 5 ] Endereco:   " << funcionarios[i].get_endereco() << endl;
                                             cout << "[ 6 ] Cartao:     " << funcionarios[i].get_cartao() << endl;
                                             cout << "[ 7 ] Cargo:      " << funcionarios[i].get_cargo() << endl;
+                                            cout << "[ 8 ] Telefone:   " << funcionarios[i].get_telefone() << endl;
                                             
                                             cout << endl;
                                             cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
@@ -727,6 +733,7 @@ void menu(){
                                             else if(op == "5"){cout << "Digite um novo \nEndereco: "; fflush(stdin); getline(cin, endereco); funcionarios[i].set_endereco(endereco);}
                                             else if(op == "6"){cout << "Digite um novo \nCartao: "; fflush(stdin); getline(cin, cartao); funcionarios[i].set_cartao(cartao);}
                                             else if(op == "7"){cout << "Digite um novo \nCargo: "; fflush(stdin); getline(cin, cargo); funcionarios[i].set_cargo(cargo);}
+                                            else if(op == "8"){cout << "Digite um novo \nTelefone: "; fflush(stdin); getline(cin, telefone); funcionarios[i].set_telefone(telefone);}
                                             else if(op == "0")break;
                                             if(op != "0"){
                                                 system("cls");
@@ -735,7 +742,7 @@ void menu(){
                                             }else cout << "Invalido" << endl;
                                         }
                                         apagar_pessoa(id, 1);
-                                        add_func(nome_fun, cpf, email, senha, endereco, cartao, id, cargo);
+                                        add_func(nome_fun, cpf, email, senha, endereco, cartao,telefone,id, cargo);
                                         system("cls");
                                         cout << CIANO << "Salvando..." << RESET << endl;
                                         sleep(1);system("cls");    
@@ -909,6 +916,7 @@ void menu(){
                                         cout << "Email: "<< clientes[i].get_email() << endl;
                                         cout << "Endereco: "<< clientes[i].get_endereco() << endl;
                                         cout << "Cartao de credito: "<< clientes[i].get_cartao() << endl;
+                                        cout << "Telefone: "<< clientes[i].get_telefone() << endl;
                                         cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
                                     }
                                 }
@@ -973,6 +981,7 @@ void menu(){
                             senha_cl = clientes[i].get_senha();end_cl = clientes[i].get_endereco();
                             email_cl = clientes[i].get_email();
                             cartao_cl = clientes[i].get_cartao(); id_cl = clientes[i].get_id();
+                            telefone_cl = clientes[i].get_telefone();
 
                             while(true){
                                 cout << CIANO "--- EDITAR ---" << RESET << endl;
@@ -982,6 +991,7 @@ void menu(){
                                 cout << "[ 4 ] Senha:      " << clientes[i].get_senha() << endl;
                                 cout << "[ 5 ] Endereco:   " << clientes[i].get_endereco() << endl;
                                 cout << "[ 6 ] Cartao:     " << clientes[i].get_cartao() << endl;
+                                cout << "[ 7 ] Telefone:   " << clientes[i].get_telefone() << endl;
                                 cout << endl;
                                 cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
                                 cout << "\nO que deseja alterar: ";
@@ -995,6 +1005,7 @@ void menu(){
                                 else if(op == "4"){cout << "Digite uma nova \nSenha: "; fflush(stdin); getline(cin, senha_cl);clientes[i].set_senha(senha_cl);}
                                 else if(op == "5"){cout << "Digite um novo \nEndereco: "; fflush(stdin); getline(cin, end_cl); clientes[i].set_endereco(end_cl);}
                                 else if(op == "6"){cout << "Digite um novo \nCartao: "; fflush(stdin); getline(cin, cartao_cl); clientes[i].set_cartao(cartao_cl);}
+                                else if(op == "7"){cout << "Digite um novo \nTelefone: "; fflush(stdin); getline(cin, telefone_cl); clientes[i].set_telefone(telefone_cl);}
                                 
                                 else if(op == "0")break;
                                 if(op != "0"){
@@ -1005,7 +1016,7 @@ void menu(){
                             }
                             
                             apagar_pessoa(id_cl, 2);
-                            add_cliente(nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, id_cl+1);
+                            add_cliente(nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl,telefone_cl ,id_cl+1);
                             system("cls");
                             cout << CIANO << "Salvando..." << RESET << endl;
                             sleep(1);system("cls");

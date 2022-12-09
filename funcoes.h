@@ -11,8 +11,8 @@ void menu();
 
 void ver(int tipo);
 void add_produto(string nome,string tamanho,string categoria,string cor,string material, float preco, int quantidade, int codigo);
-void add_func(string nome, string cpf, string email, string senha,string endereco, string cartao ,int id, string cargo);
-void add_cliente(string nome, string cpf, string email, string senha,string endereco, string cartao, int id);
+void add_func(string nome, string cpf, string email, string senha,string endereco, string cartao , string telefone,int id, string cargo);
+void add_cliente(string nome, string cpf, string email, string senha,string endereco, string cartao,string telefone , int id);
 
 void salvar(Produto aux, Pessoa novo, Funcionario nova, int tipo);
 void ler(int tipo);
