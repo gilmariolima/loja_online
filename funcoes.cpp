@@ -115,31 +115,6 @@ bool apagar_func(int num){
     return achei;  
 }
 
-bool apagar_cl(int num){
-    Pessoa novo;
-    ifstream arq;
-    ofstream fout;
-    bool achei = false;
-    
-    arq.open("clientes.dat",ios_base::binary);
-    fout.open("nova.dat",ios_base::binary|ios_base::app);
-
-    while(arq.read((char*)&novo, sizeof(Pessoa))){
-        if(novo.get_id() != num){
-            fout.write((char*)&novo, sizeof(Pessoa));  
-        }else{
-            achei = true;
-        }
-    }
-    fout.close();
-    arq.close();
-    remove("clientes.dat");
-    rename("nova.dat","clientes.dat");
-    return achei;  
-}
-
-
-
 bool procurar(int codigo){
     bool achei = false;
 
@@ -187,6 +162,7 @@ void ver(int tipo){
                 cout << "Nome: "<< clientes[i].get_nome() << endl;
                 cout << "Cpf: "<< clientes[i].get_cpf() << endl;
                 cout << "Email: "<< clientes[i].get_email() << endl;
+                cout << "Id: "<< clientes[i].get_id() << endl;
                 cout << VERMELHO <<"-------------------------------------------------------------"<< RESET <<endl;
             }
         }else {
@@ -357,6 +333,8 @@ string login(){
 
 void menu(){
     system("cls");
+     string nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, opc;
+    int id_cl;
     string nome_aux; string esc;
     int menu_;
     
@@ -726,7 +704,7 @@ void menu(){
                                             system("cls");
 
                                             if(op == "1"){cout << "Digite um novo \nNome: "; fflush(stdin); getline(cin, nome_fun); funcionarios[i].set_nome(nome_fun);}
-                                            else if(op == "2"){cout << "Digite um novo \nCpf: "; cin >> cpf; funcionarios[i].set_cpf(cpf);}
+                                            else if(op == "2"){cout << "Digite um novo \nCpf: "; fflush(stdin); getline(cin, cpf); funcionarios[i].set_cpf(cpf);}
                                             else if(op == "3"){cout << "Digite um novo \nEmail: "; fflush(stdin); getline(cin, email);funcionarios[i].set_email(email);}
                                             else if(op == "4"){cout << "Digite uma nova \nSenha: "; fflush(stdin); getline(cin, senha);funcionarios[i].set_senha(senha);}
                                             else if(op == "5"){cout << "Digite um novo \nEndereco: "; fflush(stdin); getline(cin, endereco); funcionarios[i].set_endereco(endereco);}
@@ -920,7 +898,7 @@ void menu(){
 
                                 if(resp == "s"){
                                     string nome,tamanho,categoria,material,cor;
-                                    float preco; int quanti,codigo;
+                                    float preco; int quanti,codigo, qntd;
 
                                     for(int i=0; i < carrinho.size(); i++){
                                         nome = carrinho[i].get_nome_produto();
@@ -932,15 +910,16 @@ void menu(){
                                         quanti = carrinho[i].get_quantidade();
                                         codigo = carrinho[i].get_codigo();
 
-                                        int qntd = quantidade(carrinho[i].get_codigo());
+                                        qntd = quantidade(carrinho[i].get_codigo());
                                         apagar(carrinho[i].get_codigo());
                                         add_produto(nome,tamanho,categoria,cor,material,preco,qntd - quanti,codigo);
-
-                                        carrinho.clear();
-                                        system("cls");
-                                        cout << VERDE << "Finalizando Compra..." << RESET << endl;
-                                        sleep(1);system("cls");  
+                                        
+                                         
                                     }
+                                    system("cls");
+                                    cout << VERDE << "Finalizando Compra..." << RESET << endl;
+                                    sleep(1);system("cls"); 
+                                    carrinho.clear();
                                     break;
                                 }else if(resp == "n"){
                                     
@@ -966,9 +945,7 @@ void menu(){
                                 break;
                             }
                         }
-                    }
-                }else if(opcao == "3"){   
-                   //
+                    }   
                 }else if(opcao == "0"){
                     
                     system("cls");
@@ -984,58 +961,4 @@ void menu(){
         }
     }
 }
-
-
-
-/*      string nome_cl, cpf, endereco, cartao, senha, email, op; int id;
-                    for(int i=0; i<clientes.size(); i++){
-                        if(clientes[i].get_nome() == nome_aux){
-
-                            nome_cl = clientes[i].get_nome();
-                            cpf = clientes[i].get_cpf();
-                            endereco = clientes[i].get_endereco();
-                            senha = clientes[i].get_senha();
-                            email = clientes[i].get_email();
-                            cartao = clientes[i].get_cartao();
-                            id = clientes[i].get_id();
-
-                            while(true){
-                                cout << CIANO "--- EDITAR ---" << RESET << endl;
-                                cout << "[ 1 ] Nome:    "<<RESET << clientes[i].get_nome() << endl;
-                                cout << "[ 2 ] Cpf:    "<<RESET << clientes[i].get_cpf() << endl;
-                                cout << "[ 3 ] Email:  "<<RESET << clientes[i].get_email() << endl;
-                                cout << "[ 4 ] Senha:        "<<RESET << clientes[i].get_senha() << endl;
-                                cout << "[ 5 ] Endereco:   "<<RESET << clientes[i].get_endereco() << endl;
-                                cout << "[ 6 ] Cartao:      "<<RESET << clientes[i].get_cartao() << endl;
-                                
-                                
-                                cout << endl;
-                                
-                                cout << CIANO << "[ 0 ] Salvar e sair" << RESET << endl; 
-
-                                cout << "\nO que deseja alterar: ";
-                                fflush(stdin); cin >> op;
-
-                                system("cls");
-
-                                if(op == "1"){cout << "Digite um novo \nNome: "; fflush(stdin); getline(cin, nome_cl); clientes[i].set_nome(nome_cl);}
-                                else if(op == "2"){cout << "Digite um novo \nCpf: "; fflush(stdin); getline(cin, cpf);clientes[i].set_cpf(cpf);}
-                                else if(op == "3"){cout << "Digite uma nova \nemail: "; fflush(stdin); getline(cin, email);clientes[i].set_email(email);}
-                                else if(op == "4"){cout << "Digite uma nova \nsenha: "; fflush(stdin); getline(cin, senha);clientes[i].set_senha(senha);}
-                                else if(op == "5"){cout << "Digite um novo \nendereco: "; fflush(stdin); getline(cin, endereco); clientes[i].set_endereco(endereco);}
-                                else if(op == "6"){cout << "Digite um novo \ncartao: "; cin >> cartao; clientes[i].set_cartao(cartao);}
-                                else if(op == "0")break;
-                                if(op != "0"){
-                                    system("cls");
-                                    cout << CIANO << "Alterando dados..." << RESET << endl;
-                                    sleep(1);system("cls");
-                                }else cout << "Invalido" << endl;
-                            }
-
-                            add_cliente(nome_cl, cpf, email, senha, endereco, cartao, id + 1);
-                            system("cls");
-                            cout << CIANO << "Salvando..." << RESET << endl;
-                            sleep(1);system("cls");fflush(stdin);     
-                        }
-                    }    */
 
