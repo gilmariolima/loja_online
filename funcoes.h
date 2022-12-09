@@ -18,8 +18,8 @@ void salvar(Produto aux, Pessoa novo, Funcionario nova, int tipo);
 void ler(int tipo);
 bool procurar(int codigo);
 bool apagar(int codigo);
-bool apagar_func(int num);
-bool apagar_cliente(int id);
+bool apagar_pessoa(int num, int tipo);
+
 string login();
 int id_ramdom();
 
