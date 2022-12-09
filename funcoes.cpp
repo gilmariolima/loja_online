@@ -259,23 +259,6 @@ int id_ramdom(){
     return id;
 }
 
-int procurar_nome(string nome){
-    int tipo = 0;
-    for(int i=0; i<funcionarios.size(); i++){
-        if(funcionarios[i].get_nome() == nome){
-            tipo = 1;
-            return tipo;
-        }
-    }
-    for(int i=0; i<clientes.size(); i++){
-        if(clientes[i].get_nome() == nome){
-            tipo = 2;
-            return tipo;
-        }
-    }
-    return tipo;
-}
-
 void filtrar(string cat, string tam, int tipo){
     if(tipo == 1){
         int cod;
@@ -316,9 +299,9 @@ int quantidade(int cod){
     }
 }
 
-string login(){
+int login(){
     
-    string cpf, senha, nome;
+    string cpf, senha, nome; int id;
 
     cout << CIANO"--- LOGIN --- " RESET << "\n\nCpf: "; fflush(stdin); getline(cin, cpf);
     cout << "Senha: "; fflush(stdin); getline(cin, senha);
@@ -330,7 +313,7 @@ string login(){
             cout << VERDE <<"Bem Vindo " <<nome<< RESET <<endl;
             sleep(1); system("cls");
 
-            return nome;
+            return 1;
         } 
     }
     for(int i=0; i < clientes.size(); i++){
@@ -340,7 +323,7 @@ string login(){
             cout << VERDE <<"Bem Vindo " <<nome<< RESET <<endl;
             sleep(1); system("cls");
  
-            return nome;
+            return 2;
         } 
     }
     
@@ -348,7 +331,7 @@ string login(){
     cout << VERMELHO <<"Invalido" << RESET <<endl;
     sleep(1); system("cls");
 
-    return "nada";
+    return 1000;
 }   
 
 void menu(){
@@ -356,7 +339,7 @@ void menu(){
      string nome_cl, cpf_cl, email_cl, senha_cl, end_cl, cartao_cl, telefone_cl ,opc;
     int id_cl;
     string nome_aux; string esc;
-    int menu_;
+    int menu_; int iden;
     
     while(true){
         cout << CIANO "--- MENU ---\n"<< RESET << endl;
@@ -369,8 +352,7 @@ void menu(){
 
         if(esc == "1"){
             ler(2); ler(3);
-            nome_aux = login();
-            menu_ = procurar_nome(nome_aux);
+            menu_ = login();
 
         }else if(esc == "2"){
             string nome_cliente, cpf, email, senha, endereco, cartao, telefone;
