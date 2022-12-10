@@ -559,7 +559,6 @@ void menu(){
                         cout << VERDE "--- EMITIR RELATORIOS ---\n" << RESET << endl;
                         cout << "[ 1 ] Estoque" << endl;
                         cout << "[ 2 ] Clientes Cadastrados" << endl;
-                        cout << "[ 3 ] Vendas" << endl;
                         cout << CIANO <<"[ 0 ] Sair" << RESET << endl;
                         cout << ">> ";
                         cin >> opt;
